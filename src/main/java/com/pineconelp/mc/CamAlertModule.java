@@ -14,6 +14,8 @@ import com.pineconelp.mc.items.cameras.NMSCameraItemFactory;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.runnables.CameraCheckRunnable;
+import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
+import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import com.pineconelp.mc.stores.CameraStore;
 
@@ -26,6 +28,8 @@ public class CamAlertModule extends AbstractModule {
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemValidator.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemDetailer.class).to(NMSCameraItemFactory.class).in(Singleton.class);
+
+        bind(ICameraNotifier.class).to(ChatCameraNotifier.class).in(Singleton.class);
 
         bind(CameraStore.class).in(Singleton.class);
         bind(CamAlertSettingsStore.class).in(Singleton.class);
