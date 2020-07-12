@@ -1,25 +1,31 @@
 package com.pineconelp.mc.models;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Camera {
     private UUID ownerPlayerId;
     private CameraLocation location;
     private CameraDirection direction;
-    private double range;
+    private CameraDetails cameraDetails;
 
-    public Camera(CameraLocation location, CameraDirection direction, double range, UUID ownerPlayerId) {
+    private HashMap<UUID, Date> notifications;
+
+    public Camera(CameraLocation location, CameraDirection direction, UUID ownerPlayerId, CameraDetails cameraDetails) {
         this.location = location;
         this.direction = direction;
-        this.range = range;
         this.ownerPlayerId = ownerPlayerId;
+        this.cameraDetails = cameraDetails;
+
+        this.notifications = new HashMap<>();
     }
 
     public CameraLocation[] getMonitoredLocations() {
         ArrayList<CameraLocation> locations = new ArrayList<CameraLocation>();
 
-        for (int i = 1; i < range; i++) {
+        for (int i = 1; i < getRange(); i++) {
             int x = location.getX();
             int y = location.getY();
             int z = location.getZ();
@@ -51,12 +57,28 @@ public class Camera {
         return arrayLocations;
     }
 
+    public void addPlayerNotification(UUID playerId) {
+        notifications.put(playerId, new Date());
+    }
+
+    public Date getLastPlayerNotification(UUID playerId) {
+        return notifications.get(playerId);
+    }
+
     public UUID getOwnerPlayerId() {
         return ownerPlayerId;
     }
 
+    public CameraDetails getCameraDetails() {
+        return cameraDetails;
+    }
+
     public double getRange() {
-        return range;
+        return cameraDetails.getRange();
+    }
+
+    public int getNotificationThresholdSeconds() {
+        return cameraDetails.getNotificationThresholdSeconds();
     }
 
 	public CameraLocation getLocation() {

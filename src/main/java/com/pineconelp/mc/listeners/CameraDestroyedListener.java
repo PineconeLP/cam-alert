@@ -45,7 +45,7 @@ public class CameraDestroyedListener implements Listener {
 
             blockBreakEvent.setDropItems(false);
 
-            ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getRange(), 1);
+            ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getCameraDetails(), 1);
             blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
         }
     }

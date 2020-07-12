@@ -1,5 +1,6 @@
 package com.pineconelp.mc.listeners;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -27,6 +28,7 @@ public class CameraMovementDetectedListener implements Listener {
 
     @EventHandler
     public void onCameraMovementDetected(PlayerMoveEvent playerMoveEvent) {
+        Player movementPlayer = playerMoveEvent.getPlayer();
         Location playerLocation = playerMoveEvent.getTo();
         CameraLocation cameraLocation = new CameraLocation(playerLocation);
 
@@ -34,16 +36,25 @@ public class CameraMovementDetectedListener implements Listener {
             List<Camera> triggeredCameras = cameraStore.getCamerasMonitoring(cameraLocation);
 
             for (Camera camera : triggeredCameras) {
-                notifyCamera(camera);
+                notifyCamera(camera, movementPlayer);
             }
         }
     }
 
-    private void notifyCamera(Camera camera) {
-        Player cameraOwner = Bukkit.getServer().getPlayer(camera.getOwnerPlayerId());
+    private void notifyCamera(Camera camera, Player movementPlayer) {
+        Date lastPlayerNotification = camera.getLastPlayerNotification(movementPlayer.getUniqueId());
+        int notificationSecondsThreshold = camera.getNotificationThresholdSeconds();
+		Date notificationThreshold = new Date(System.currentTimeMillis() - notificationSecondsThreshold * 1000);
+
+        if(lastPlayerNotification == null || lastPlayerNotification.before(notificationThreshold)) {
+            camera.addPlayerNotification(movementPlayer.getUniqueId());
+            Player cameraOwner = Bukkit.getPlayer(camera.getOwnerPlayerId());
         
-        if(cameraOwner != null) {
-            cameraOwner.sendMessage(ChatColor.RED + "MOVEMENT DETECTED AT CAMERA.");
+            if(cameraOwner != null) {
+                cameraOwner.sendMessage(ChatColor.RED + "MOVEMENT DETECTED AT CAMERA.");
+            }
         }
+
+
     }
 }

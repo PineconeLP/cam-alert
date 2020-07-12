@@ -2,6 +2,7 @@ package com.pineconelp.mc.commands;
 
 import com.google.inject.Inject;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
+import com.pineconelp.mc.models.CameraDetails;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,20 +21,30 @@ public class GiveCameraItemCommandHandler implements ICommandHandler {
 
     @Override
     public boolean handle(CommandSender sender, String[] args) {
-        if(sender instanceof Player){
+        if (sender instanceof Player) {
             Player player = (Player) sender;
 
             int cameraRange = 10;
+            int cameraNotificationThresholdSeconds = 5;
 
-            if(args.length > 0) {
+            if (args.length > 0) {
                 try {
                     cameraRange = Integer.parseInt(args[0]);
                 } catch (Exception e) {
-                    player.sendMessage(String.format(ChatColor.RED + "Invalid camera range '%s'. Using default of 10.", args[0]));
+                    player.sendMessage(String.format(ChatColor.RED + "Invalid camera range '%s'. Using default of %d.", args[0], cameraRange));
+                }
+
+                if (args.length > 1) {
+                    try {
+                        cameraNotificationThresholdSeconds = Integer.parseInt(args[1]);
+                    } catch (Exception e) {
+                        player.sendMessage(String.format(ChatColor.RED + "Invalid camera notification threshold seconds '%s'. Using default of %d.", args[1], cameraNotificationThresholdSeconds));
+                    }
                 }
             }
 
-            ItemStack cameraItem = cameraItemFactory.createCameraItem(cameraRange, 1);
+            CameraDetails details = new CameraDetails(cameraRange, cameraNotificationThresholdSeconds);
+            ItemStack cameraItem = cameraItemFactory.createCameraItem(details, 1);
             player.getInventory().addItem(cameraItem);
 
             return true;

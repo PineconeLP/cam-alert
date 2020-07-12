@@ -1,11 +1,11 @@
 package com.pineconelp.mc.listeners;
 
 import com.google.inject.Inject;
-import com.pineconelp.mc.items.cameras.CameraItemDetails;
 import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemValidator;
 import com.pineconelp.mc.items.cameras.InvalidCameraItemException;
 import com.pineconelp.mc.models.Camera;
+import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.models.CameraDirection;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
@@ -42,9 +42,8 @@ public class CameraPlacedListener implements Listener {
             Location cameraLocation = blockPlaceEvent.getBlockPlaced().getLocation();
 
             try {
-                CameraItemDetails cameraItemDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
-                double cameraRange = cameraItemDetails.getRange();
-                cameraStore.addCamera(createCamera(cameraLocation, cameraRange, player));
+                CameraDetails cameraDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
+                cameraStore.addCamera(createCamera(cameraLocation, player, cameraDetails));
 
                 player.sendMessage(ChatColor.GREEN + "Camera initialized.");
             } catch (InvalidCameraItemException e) {
@@ -53,12 +52,12 @@ public class CameraPlacedListener implements Listener {
         }
     }
 
-    private Camera createCamera(Location placedLocation, double range, Player player) {
+    private Camera createCamera(Location placedLocation, Player player, CameraDetails cameraDetails) {
         float playerYaw = player.getLocation().getYaw();
         CameraDirection cameraDirection = getCameraDirection(playerYaw);
         CameraLocation cameraLocation = new CameraLocation(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
 
-        return new Camera(cameraLocation, cameraDirection, range, player.getUniqueId());
+        return new Camera(cameraLocation, cameraDirection, player.getUniqueId(), cameraDetails);
     }
 
     private CameraDirection getCameraDirection(float playerYaw) {
