@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -43,7 +44,9 @@ public class CameraDestroyedListener implements Listener {
             }
 
             blockBreakEvent.setDropItems(false);
-            blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItemFactory.createCameraItem(1));
+
+            ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getRange(), 1);
+            blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.pineconelp.mc.commands;
 
+import java.util.Arrays;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -27,7 +29,7 @@ public class CamAlertCommand implements CommandExecutor {
             return noArgsHandler.handle(sender, args);
         } else {
             if(args[0].equalsIgnoreCase("create")) {
-                return giveCameraCommandHandler.handle(sender, args);
+                return giveCameraCommandHandler.handle(sender, Arrays.copyOfRange(args, 1, args.length));
             }
         }
 

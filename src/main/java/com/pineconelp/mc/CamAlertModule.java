@@ -7,6 +7,7 @@ import com.pineconelp.mc.commands.ICommandHandler;
 import com.pineconelp.mc.commands.CamAlertCommand;
 import com.pineconelp.mc.commands.GiveCameraItemCommandHandler;
 import com.pineconelp.mc.commands.WelcomeCommandHandler;
+import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.items.cameras.ICameraItemValidator;
 import com.pineconelp.mc.items.cameras.NMSCameraItemFactory;
@@ -23,6 +24,7 @@ public class CamAlertModule extends AbstractModule {
 
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemValidator.class).to(NMSCameraItemFactory.class).in(Singleton.class);
+        bind(ICameraItemDetailer.class).to(NMSCameraItemFactory.class).in(Singleton.class);
 
         bind(CameraStore.class).in(Singleton.class);
 

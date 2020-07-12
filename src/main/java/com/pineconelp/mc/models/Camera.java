@@ -55,6 +55,10 @@ public class Camera {
         return ownerPlayerId;
     }
 
+    public double getRange() {
+        return range;
+    }
+
 	public CameraLocation getLocation() {
 		return location;
 	}
