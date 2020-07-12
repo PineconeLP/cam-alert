@@ -24,7 +24,7 @@ public class App extends JavaPlugin {
         registerListener(injector.getInstance(CameraPlacedListener.class));
         registerListener(injector.getInstance(CameraDestroyedListener.class));
 
-        registerRepeatingAsyncTask(injector.getInstance(CameraCheckRunnable.class), 20L);
+        registerRepeatingSyncTask(injector.getInstance(CameraCheckRunnable.class), 20L);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class App extends JavaPlugin {
         getServer().getPluginManager().registerEvents(cameraPlacedEventListener, this);
     }
 
-    private void registerRepeatingAsyncTask(BukkitRunnable runnable, long interval) {
-        runnable.runTaskTimerAsynchronously(this, 0L, interval);
+    private void registerRepeatingSyncTask(BukkitRunnable runnable, long interval) {
+        runnable.runTaskTimer(this, 0L, interval);
     }
 }
