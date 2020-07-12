@@ -1,6 +1,7 @@
 package com.pineconelp.mc.listeners;
 
 import com.google.inject.Inject;
+import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
@@ -17,10 +18,12 @@ import net.md_5.bungee.api.ChatColor;
 public class CameraDestroyedListener implements Listener {
 
     private CameraStore cameraStore;
+    private ICameraItemFactory cameraItemFactory;
 
     @Inject
-    public CameraDestroyedListener(CameraStore cameraStore) {
+    public CameraDestroyedListener(CameraStore cameraStore, ICameraItemFactory cameraItemFactory) {
         this.cameraStore = cameraStore;
+		this.cameraItemFactory = cameraItemFactory;
     }
 
     @EventHandler
@@ -39,6 +42,8 @@ public class CameraDestroyedListener implements Listener {
                 cameraOwnerPlayer.sendMessage(ChatColor.RED + "Your camera was destroyed!");
             }
 
+            blockBreakEvent.setDropItems(false);
+            blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItemFactory.createCameraItem(1));
         }
     }
 }
