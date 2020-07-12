@@ -1,9 +1,11 @@
 package com.pineconelp.mc.models;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
+
+import org.bukkit.Location;
 
 public class Camera {
     private UUID ownerPlayerId;
@@ -12,6 +14,7 @@ public class Camera {
     private CameraDetails cameraDetails;
 
     private HashMap<UUID, Date> notifications;
+    private HashSet<CameraLocation> monitoredLocations;
 
     public Camera(CameraLocation location, CameraDirection direction, UUID ownerPlayerId, CameraDetails cameraDetails) {
         this.location = location;
@@ -20,10 +23,13 @@ public class Camera {
         this.cameraDetails = cameraDetails;
 
         this.notifications = new HashMap<>();
+        this.monitoredLocations = new HashSet<>();
+
+        updateMonitoredLocation();
     }
 
-    public CameraLocation[] getMonitoredLocations() {
-        ArrayList<CameraLocation> locations = new ArrayList<CameraLocation>();
+    private void updateMonitoredLocation() {
+        monitoredLocations = new HashSet<>();
 
         for (int i = 1; i < getRange(); i++) {
             UUID worldId = location.getWorldId();
@@ -48,15 +54,15 @@ public class Camera {
                     break;
             }
 
-            locations.add(new CameraLocation(worldId, x, y, z));
-            locations.add(new CameraLocation(worldId, x, y - 1, z));
+            monitoredLocations.add(new CameraLocation(worldId, x, y, z));
+            monitoredLocations.add(new CameraLocation(worldId, x, y - 1, z));
         }
-        
-        CameraLocation[] arrayLocations = new CameraLocation[locations.size()];
-        locations.toArray(arrayLocations);
-
-        return arrayLocations;
     }
+
+    public boolean isMonitoring(Location targetLocation) {
+        CameraLocation cameraTargetLocation = new CameraLocation(targetLocation);
+		return monitoredLocations.contains(cameraTargetLocation);
+	}
 
     public void addPlayerNotification(UUID playerId) {
         notifications.put(playerId, new Date());

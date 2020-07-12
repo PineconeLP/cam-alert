@@ -25,16 +25,20 @@ public class CameraCheckRunnable extends BukkitRunnable {
     @Override
     public void run() {
         for (Camera camera : cameraStore.getCameras()) {
-            for (CameraLocation cameraLocation : camera.getMonitoredLocations()) {
-                World cameraWorld = Bukkit.getWorld(cameraLocation.getWorldId());
-                Location monitoredLocation = new Location(cameraWorld, cameraLocation.getX(), cameraLocation.getY(), cameraLocation.getZ());
-                Collection<Entity> entitiesInCameraSight = cameraWorld.getNearbyEntities(monitoredLocation, 1, 1, 1);
+            CameraLocation cameraLocation = camera.getLocation();
 
-                for (Entity entity : entitiesInCameraSight) {
-                    if(entity.getLocation().getBlock().equals(monitoredLocation.getBlock())){
-                        Bukkit.broadcastMessage(entity.getUniqueId().toString());
-                        Bukkit.broadcastMessage(String.format("%d", entity.getEntityId()));
-                    }
+            World cameraWorld = Bukkit.getWorld(cameraLocation.getWorldId());
+            Location cameraWorldLocation = new Location(cameraWorld, cameraLocation.getX(), cameraLocation.getY(), cameraLocation.getZ());
+
+            double cameraRange = camera.getRange();
+
+            Collection<Entity> entitiesInCameraSight = cameraWorld.getNearbyEntities(cameraWorldLocation, cameraRange, cameraRange, cameraRange);
+
+            for (Entity entity : entitiesInCameraSight) {
+                Location location = entity.getLocation();
+
+                if(camera.isMonitoring(location)) {
+                    Bukkit.broadcastMessage(entity.getUniqueId().toString());
                 }
             }
         }
