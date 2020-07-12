@@ -34,8 +34,8 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         itemMeta.setDisplayName(displayName);
 
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(String.format(ChatColor.GREEN + "Range: %d", (int)range));
-        lore.add(String.format(ChatColor.GREEN + "Notification Interval: %d", notificationThresholdSeconds));
+        lore.add(String.format(ChatColor.GREEN + "Range: %dm", (int)range));
+        lore.add(String.format(ChatColor.GREEN + "Notification Interval: %ds", notificationThresholdSeconds));
         itemMeta.setLore(lore);
 
         cameraItem.setItemMeta(itemMeta);
