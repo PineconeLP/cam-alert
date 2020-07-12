@@ -24,7 +24,7 @@ public class App extends JavaPlugin {
         registerListener(injector.getInstance(CameraPlacedListener.class));
         registerListener(injector.getInstance(CameraDestroyedListener.class));
 
-        registerRepeatingSyncTask(injector.getInstance(CameraCheckRunnable.class), 20L);
+        registerRepeatingSyncTask(injector.getInstance(CameraCheckRunnable.class), 10L);
     }
 
     @Override

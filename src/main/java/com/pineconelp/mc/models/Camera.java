@@ -64,12 +64,19 @@ public class Camera {
 		return monitoredLocations.contains(cameraTargetLocation);
 	}
 
-    public void addPlayerNotification(UUID playerId) {
-        notifications.put(playerId, new Date());
+    public void addEntityNotification(UUID entityId) {
+        notifications.put(entityId, new Date());
     }
 
-    public Date getLastPlayerNotification(UUID playerId) {
-        return notifications.get(playerId);
+    public boolean canAddNotificationForEntity(UUID entityId) {
+        Date lastPlayerNotification = getLastNotificationForEntity(entityId);
+		Date notificationThreshold = new Date(System.currentTimeMillis() - (int)(getNotificationThresholdSeconds() * 1000));
+
+        return lastPlayerNotification == null || lastPlayerNotification.before(notificationThreshold);
+    }
+
+    public Date getLastNotificationForEntity(UUID entityId) {
+        return notifications.get(entityId);
     }
 
     public UUID getOwnerPlayerId() {
