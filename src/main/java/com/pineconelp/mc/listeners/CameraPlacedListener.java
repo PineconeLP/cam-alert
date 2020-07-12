@@ -14,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class CameraPlacedListener implements Listener{
 
     private CameraStore cameraStore;
@@ -34,7 +36,7 @@ public class CameraPlacedListener implements Listener{
             Location cameraLocation = blockPlaceEvent.getBlockPlaced().getLocation();
             cameraStore.addCamera(createCamera(cameraLocation, 10, player));
 
-            blockPlaceEvent.getPlayer().sendMessage("You placed a camera!");
+            blockPlaceEvent.getPlayer().sendMessage(ChatColor.GREEN + "Camera initialized.");
         }
     }
 
@@ -47,8 +49,7 @@ public class CameraPlacedListener implements Listener{
     }
 
     private CameraDirection getCameraDirection(float playerYaw) {
-        float inverseYaw = playerYaw <= 0 ? playerYaw + 180 : playerYaw - 180;
-
-        return CameraDirection.fromYaw(inverseYaw);
+        CameraDirection playerDirection = CameraDirection.fromYaw(playerYaw);
+        return playerDirection.inverse();
     }
 }

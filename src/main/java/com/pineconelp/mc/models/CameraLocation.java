@@ -1,5 +1,7 @@
 package com.pineconelp.mc.models;
 
+import java.util.Objects;
+
 public class CameraLocation {
     private int x;
     private int y;
@@ -21,6 +23,11 @@ public class CameraLocation {
 
     public int getZ() {
         return z;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 
     @Override

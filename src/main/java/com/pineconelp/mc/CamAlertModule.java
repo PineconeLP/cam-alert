@@ -23,7 +23,7 @@ public class CamAlertModule extends AbstractModule {
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemValidator.class).to(NMSCameraItemFactory.class).in(Singleton.class);
 
-        bind(CameraStore.class);
+        bind(CameraStore.class).in(Singleton.class);
 
         bind(ICommandHandler.class).annotatedWith(Names.named("NoArgsHandler")).to(WelcomeCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("GiveCameraItemCommandHandler")).to(GiveCameraItemCommandHandler.class).in(Singleton.class);
