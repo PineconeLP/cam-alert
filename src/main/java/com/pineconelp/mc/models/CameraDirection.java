@@ -7,6 +7,10 @@ public enum CameraDirection {
     WEST;
 
     public static CameraDirection fromYaw(float yaw) {
+        while(yaw < 0) {
+            yaw += 360;
+        }
+
         if(yaw >= 135 && yaw < 225) {
             return CameraDirection.NORTH;
         } else if(yaw >= 45 && yaw < 135) {
