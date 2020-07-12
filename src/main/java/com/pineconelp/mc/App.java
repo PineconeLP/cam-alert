@@ -3,12 +3,13 @@ package com.pineconelp.mc;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
-import com.pineconelp.mc.listeners.CameraMovementDetectedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
+import com.pineconelp.mc.runnables.CameraCheckRunnable;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class App extends JavaPlugin {
 
@@ -17,10 +18,13 @@ public class App extends JavaPlugin {
         getLogger().info("CamAlert enabled.");
 
         Injector injector = Guice.createInjector(new CamAlertModule());
-        getCommand("cam").setExecutor(injector.getInstance(CommandExecutor.class));
+
+        registerCommand("cam", injector.getInstance(CommandExecutor.class));
+
         registerListener(injector.getInstance(CameraPlacedListener.class));
-        registerListener(injector.getInstance(CameraMovementDetectedListener.class));
         registerListener(injector.getInstance(CameraDestroyedListener.class));
+
+        registerRepeatingAsyncTask(injector.getInstance(CameraCheckRunnable.class), 20L);
     }
 
     @Override
@@ -28,7 +32,15 @@ public class App extends JavaPlugin {
         getLogger().info("CamAlert disabled.");
     }
 
+    private void registerCommand(String commandName, CommandExecutor executor) {
+        getCommand(commandName).setExecutor(executor);
+    }
+
     private void registerListener(Listener cameraPlacedEventListener) {
         getServer().getPluginManager().registerEvents(cameraPlacedEventListener, this);
+    }
+
+    private void registerRepeatingAsyncTask(BukkitRunnable runnable, long interval) {
+        runnable.runTaskTimerAsynchronously(this, 0L, interval);
     }
 }

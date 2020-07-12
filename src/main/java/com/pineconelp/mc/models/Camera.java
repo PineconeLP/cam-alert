@@ -26,6 +26,7 @@ public class Camera {
         ArrayList<CameraLocation> locations = new ArrayList<CameraLocation>();
 
         for (int i = 1; i < getRange(); i++) {
+            UUID worldId = location.getWorldId();
             int x = location.getX();
             int y = location.getY();
             int z = location.getZ();
@@ -47,8 +48,8 @@ public class Camera {
                     break;
             }
 
-            locations.add(new CameraLocation(x, y, z));
-            locations.add(new CameraLocation(x, y - 1, z));
+            locations.add(new CameraLocation(worldId, x, y, z));
+            locations.add(new CameraLocation(worldId, x, y - 1, z));
         }
         
         CameraLocation[] arrayLocations = new CameraLocation[locations.size()];

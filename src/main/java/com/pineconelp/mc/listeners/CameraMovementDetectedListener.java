@@ -1,5 +1,6 @@
 package com.pineconelp.mc.listeners;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.pineconelp.mc.stores.CameraStore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,17 +30,7 @@ public class CameraMovementDetectedListener implements Listener {
 
     @EventHandler
     public void onCameraMovementDetected(PlayerMoveEvent playerMoveEvent) {
-        Player movementPlayer = playerMoveEvent.getPlayer();
-        Location playerLocation = playerMoveEvent.getTo();
-        CameraLocation cameraLocation = new CameraLocation(playerLocation);
 
-        if(cameraStore.hasCamerasMonitoring(cameraLocation)) {
-            List<Camera> triggeredCameras = cameraStore.getCamerasMonitoring(cameraLocation);
-
-            for (Camera camera : triggeredCameras) {
-                notifyCamera(camera, movementPlayer);
-            }
-        }
     }
 
     private void notifyCamera(Camera camera, Player movementPlayer) {
@@ -49,7 +41,7 @@ public class CameraMovementDetectedListener implements Listener {
         if(lastPlayerNotification == null || lastPlayerNotification.before(notificationThreshold)) {
             camera.addPlayerNotification(movementPlayer.getUniqueId());
             Player cameraOwner = Bukkit.getPlayer(camera.getOwnerPlayerId());
-        
+
             if(cameraOwner != null) {
                 cameraOwner.sendMessage(ChatColor.RED + "MOVEMENT DETECTED AT CAMERA.");
             }

@@ -55,7 +55,7 @@ public class CameraPlacedListener implements Listener {
     private Camera createCamera(Location placedLocation, Player player, CameraDetails cameraDetails) {
         float playerYaw = player.getLocation().getYaw();
         CameraDirection cameraDirection = getCameraDirection(playerYaw);
-        CameraLocation cameraLocation = new CameraLocation(placedLocation.getBlockX(), placedLocation.getBlockY(), placedLocation.getBlockZ());
+        CameraLocation cameraLocation = new CameraLocation(placedLocation);
 
         return new Camera(cameraLocation, cameraDirection, player.getUniqueId(), cameraDetails);
     }
