@@ -43,8 +43,8 @@ public class CameraMovementDetectedListener implements Listener {
 
     private void notifyCamera(Camera camera, Player movementPlayer) {
         Date lastPlayerNotification = camera.getLastPlayerNotification(movementPlayer.getUniqueId());
-        int notificationSecondsThreshold = camera.getNotificationThresholdSeconds();
-		Date notificationThreshold = new Date(System.currentTimeMillis() - notificationSecondsThreshold * 1000);
+        double notificationSecondsThreshold = camera.getNotificationThresholdSeconds();
+		Date notificationThreshold = new Date(System.currentTimeMillis() - (int)(notificationSecondsThreshold * 1000));
 
         if(lastPlayerNotification == null || lastPlayerNotification.before(notificationThreshold)) {
             camera.addPlayerNotification(movementPlayer.getUniqueId());

@@ -3,6 +3,7 @@ package com.pineconelp.mc.commands;
 import com.google.inject.Inject;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.models.CameraDetails;
+import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,10 +14,13 @@ import net.md_5.bungee.api.ChatColor;
 public class GiveCameraItemCommandHandler implements ICommandHandler {
 
     private ICameraItemFactory cameraItemFactory;
+    private CamAlertSettingsStore camAlertSettingsStore;
 
     @Inject
-    public GiveCameraItemCommandHandler(ICameraItemFactory cameraItemFactory) {
+    public GiveCameraItemCommandHandler(ICameraItemFactory cameraItemFactory,
+            CamAlertSettingsStore camAlertSettingsStore) {
         this.cameraItemFactory = cameraItemFactory;
+        this.camAlertSettingsStore = camAlertSettingsStore;
     }
 
     @Override
@@ -24,21 +28,21 @@ public class GiveCameraItemCommandHandler implements ICommandHandler {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            int cameraRange = 10;
-            int cameraNotificationThresholdSeconds = 5;
+            double cameraRange = camAlertSettingsStore.getDefaultCameraRange();
+            double cameraNotificationThresholdSeconds = camAlertSettingsStore.getDefaultCameraNotificationThresholdSeconds();
 
             if (args.length > 0) {
                 try {
-                    cameraRange = Integer.parseInt(args[0]);
+                    cameraRange = Double.parseDouble(args[0]);
                 } catch (Exception e) {
-                    player.sendMessage(String.format(ChatColor.RED + "Invalid camera range '%s'. Using default of %d.", args[0], cameraRange));
+                    player.sendMessage(String.format(ChatColor.RED + "Invalid camera range '%s'. Using default of %d.", args[0], (int)cameraRange));
                 }
 
                 if (args.length > 1) {
                     try {
-                        cameraNotificationThresholdSeconds = Integer.parseInt(args[1]);
+                        cameraNotificationThresholdSeconds = Double.parseDouble(args[1]);
                     } catch (Exception e) {
-                        player.sendMessage(String.format(ChatColor.RED + "Invalid camera notification threshold seconds '%s'. Using default of %d.", args[1], cameraNotificationThresholdSeconds));
+                        player.sendMessage(String.format(ChatColor.RED + "Invalid camera notification threshold seconds '%s'. Using default of %d.", args[1], (int)cameraNotificationThresholdSeconds));
                     }
                 }
             }

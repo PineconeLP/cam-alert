@@ -2,9 +2,9 @@ package com.pineconelp.mc.models;
 
 public class CameraDetails {
     private double range;
-    private int notificationThresholdSeconds;
+    private double notificationThresholdSeconds;
 
-    public CameraDetails(double range, int notificationThresholdSeconds) {
+    public CameraDetails(double range, double notificationThresholdSeconds) {
         this.range = range;
         this.notificationThresholdSeconds = notificationThresholdSeconds;
     }
@@ -13,7 +13,7 @@ public class CameraDetails {
         return range;
     }
 
-    public int getNotificationThresholdSeconds() {
+    public double getNotificationThresholdSeconds() {
         return notificationThresholdSeconds;
     }
 }

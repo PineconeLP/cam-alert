@@ -77,7 +77,7 @@ public class Camera {
         return cameraDetails.getRange();
     }
 
-    public int getNotificationThresholdSeconds() {
+    public double getNotificationThresholdSeconds() {
         return cameraDetails.getNotificationThresholdSeconds();
     }
 

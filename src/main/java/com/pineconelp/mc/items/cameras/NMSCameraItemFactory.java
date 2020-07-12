@@ -2,10 +2,11 @@ package com.pineconelp.mc.items.cameras;
 
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
 import com.pineconelp.mc.models.CameraDetails;
+import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,12 +21,19 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
     private static final String RANGE_TAG_NAME = "range";
     private static final String NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME = "notification_threshold_seconds";
 
+    private CamAlertSettingsStore camAlertSettingsStore;
+
+    @Inject
+    public NMSCameraItemFactory(CamAlertSettingsStore camAlertSettingsStore) {
+        this.camAlertSettingsStore = camAlertSettingsStore;
+    }
+
     @Override
     public ItemStack createCameraItem(CameraDetails details, int amount) {
-        ItemStack cameraItem = new ItemStack(Material.JACK_O_LANTERN, amount);
+        ItemStack cameraItem = new ItemStack(camAlertSettingsStore.getDefaultCameraBlockMaterial(), amount);
 
         double range = details.getRange();
-        int notificationThresholdSeconds = details.getNotificationThresholdSeconds();
+        double notificationThresholdSeconds = details.getNotificationThresholdSeconds();
 
         // Add display information.
         ItemMeta itemMeta = cameraItem.getItemMeta();
@@ -35,7 +43,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
 
         ArrayList<String> lore = new ArrayList<>();
         lore.add(String.format(ChatColor.GREEN + "Range: %dm", (int)range));
-        lore.add(String.format(ChatColor.GREEN + "Notification Interval: %ds", notificationThresholdSeconds));
+        lore.add(String.format(ChatColor.GREEN + "Notification Interval: %ds", (int)notificationThresholdSeconds));
         itemMeta.setLore(lore);
 
         cameraItem.setItemMeta(itemMeta);
@@ -46,7 +54,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         NBTTagCompound cameraItemTag = craftCameraItem.hasTag() ? craftCameraItem.getTag() : new NBTTagCompound();
         cameraItemTag.set(VERIFIED_TAG_NAME, NBTTagInt.a(1));
         cameraItemTag.set(RANGE_TAG_NAME, NBTTagDouble.a(range));
-        cameraItemTag.set(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME, NBTTagInt.a(notificationThresholdSeconds));
+        cameraItemTag.set(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME, NBTTagDouble.a(notificationThresholdSeconds));
 
         craftCameraItem.setTag(cameraItemTag);
 
@@ -77,7 +85,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         NBTTagCompound cameraItemTag = craftCameraItem.getTag();
         
         double range = cameraItemTag.getDouble(RANGE_TAG_NAME);
-        int notificationThresholdSeconds = cameraItemTag.getInt(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME);
+        double notificationThresholdSeconds = cameraItemTag.getDouble(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME);
 
         return new CameraDetails(range, notificationThresholdSeconds);
     }

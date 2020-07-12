@@ -14,6 +14,7 @@ import com.pineconelp.mc.items.cameras.NMSCameraItemFactory;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraMovementDetectedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
+import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import com.pineconelp.mc.stores.CameraStore;
 
 import org.bukkit.command.CommandExecutor;
@@ -27,6 +28,7 @@ public class CamAlertModule extends AbstractModule {
         bind(ICameraItemDetailer.class).to(NMSCameraItemFactory.class).in(Singleton.class);
 
         bind(CameraStore.class).in(Singleton.class);
+        bind(CamAlertSettingsStore.class).in(Singleton.class);
 
         bind(ICommandHandler.class).annotatedWith(Names.named("NoArgsHandler")).to(WelcomeCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("GiveCameraItemCommandHandler")).to(GiveCameraItemCommandHandler.class).in(Singleton.class);
