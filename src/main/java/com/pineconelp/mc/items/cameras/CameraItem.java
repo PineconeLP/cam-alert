@@ -8,7 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class CameraItem extends ItemStack {
     public CameraItem(int amount) {
-        super(Material.DIAMOND_BLOCK, amount);
+        super(Material.JACK_O_LANTERN, amount);
 
         ItemMeta itemMeta = this.getItemMeta();
 

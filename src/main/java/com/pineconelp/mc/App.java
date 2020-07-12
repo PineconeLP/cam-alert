@@ -2,7 +2,8 @@ package com.pineconelp.mc;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.pineconelp.mc.events.CameraPlacedEventListener;
+import com.pineconelp.mc.listeners.CameraMovementDetectedListener;
+import com.pineconelp.mc.listeners.CameraPlacedListener;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -15,13 +16,9 @@ public class App extends JavaPlugin {
         getLogger().info("CamAlert enabled.");
 
         Injector injector = Guice.createInjector(new CamAlertModule());
-
-		CommandExecutor commandExecutor = injector.getInstance(CommandExecutor.class);
-
-        getCommand("cam").setExecutor(commandExecutor);
-
-        CameraPlacedEventListener cameraPlacedEventListener = injector.getInstance(CameraPlacedEventListener.class);
-        registerEventListener(cameraPlacedEventListener);
+        getCommand("cam").setExecutor(injector.getInstance(CommandExecutor.class));
+        registerListener(injector.getInstance(CameraPlacedListener.class));
+        registerListener(injector.getInstance(CameraMovementDetectedListener.class));
     }
 
     @Override
@@ -29,7 +26,7 @@ public class App extends JavaPlugin {
         getLogger().info("CamAlert disabled.");
     }
 
-    private void registerEventListener(Listener cameraPlacedEventListener) {
+    private void registerListener(Listener cameraPlacedEventListener) {
         getServer().getPluginManager().registerEvents(cameraPlacedEventListener, this);
     }
 }
