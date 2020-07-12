@@ -10,6 +10,7 @@ import com.pineconelp.mc.commands.WelcomeCommandHandler;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.items.cameras.ICameraItemValidator;
 import com.pineconelp.mc.items.cameras.NMSCameraItemFactory;
+import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraMovementDetectedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.stores.CameraStore;
@@ -31,5 +32,6 @@ public class CamAlertModule extends AbstractModule {
 
         bind(CameraPlacedListener.class);
         bind(CameraMovementDetectedListener.class);
+        bind(CameraDestroyedListener.class);
     }
 }

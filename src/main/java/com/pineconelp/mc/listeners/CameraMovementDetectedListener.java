@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.pineconelp.mc.models.Camera;
+import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
 
 import org.bukkit.Bukkit;
@@ -27,9 +28,10 @@ public class CameraMovementDetectedListener implements Listener {
     @EventHandler
     public void onCameraMovementDetected(PlayerMoveEvent playerMoveEvent) {
         Location playerLocation = playerMoveEvent.getTo();
+        CameraLocation cameraLocation = new CameraLocation(playerLocation);
 
-        if(cameraStore.hasCameras(playerLocation)) {
-            List<Camera> triggeredCameras = cameraStore.getCameras(playerLocation);
+        if(cameraStore.hasCamerasMonitoring(cameraLocation)) {
+            List<Camera> triggeredCameras = cameraStore.getCamerasMonitoring(cameraLocation);
 
             for (Camera camera : triggeredCameras) {
                 notifyCamera(camera);

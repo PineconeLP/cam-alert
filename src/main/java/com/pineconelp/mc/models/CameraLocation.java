@@ -2,6 +2,8 @@ package com.pineconelp.mc.models;
 
 import java.util.Objects;
 
+import org.bukkit.Location;
+
 public class CameraLocation {
     private int x;
     private int y;
@@ -11,6 +13,12 @@ public class CameraLocation {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public CameraLocation(Location location) {
+        this.x = location.getBlockX();
+        this.y = location.getBlockY();
+        this.z = location.getBlockZ();
     }
 
     public int getX() {

@@ -7,40 +7,27 @@ import java.util.List;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraLocation;
 
-import org.bukkit.Location;
-
 public class CameraStore {
+    private HashMap<CameraLocation, Camera> cameras;
     private HashMap<CameraLocation, List<Camera>> monitoredLocations;
 
     public CameraStore() {
+        cameras = new HashMap<CameraLocation, Camera>(); 
         monitoredLocations = new HashMap<CameraLocation, List<Camera>>();
     }
 
+    public boolean hasCamera(CameraLocation cameraLocation) {
+        return cameras.containsKey(cameraLocation);
+    }
+
     public void addCamera(Camera camera) {
+        cameras.put(camera.getLocation(), camera);
+
         CameraLocation[] cameraMonitoredLocations = camera.getMonitoredLocations();
 
         for (CameraLocation location : cameraMonitoredLocations) {
             addMonitoredLocation(location, camera);
         }
-    }
-
-    public boolean hasCameras(Location location) {
-        CameraLocation cameraLocation = new CameraLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-        return hasCameras(cameraLocation);
-    }
-
-    public boolean hasCameras(CameraLocation location) {
-        List<Camera> cameras = getCameras(location);
-        return cameras != null && cameras.size() > 0;
-    }
-
-    public List<Camera> getCameras(Location location) {
-        CameraLocation cameraLocation = new CameraLocation(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-        return getCameras(cameraLocation);
-    }
-
-    public List<Camera> getCameras(CameraLocation location) {
-        return monitoredLocations.get(location);
     }
 
     private void addMonitoredLocation(CameraLocation location, Camera camera) {
@@ -50,5 +37,33 @@ public class CameraStore {
 
         List<Camera> locationCameras = monitoredLocations.get(location);
         locationCameras.add(camera);
+    }
+
+    public Camera removeCamera(CameraLocation cameraLocation) {
+        Camera removedCamera = cameras.remove(cameraLocation);
+
+        CameraLocation[] cameraMonitoredLocations = removedCamera.getMonitoredLocations();
+
+        for (CameraLocation location : cameraMonitoredLocations) {
+            removeMonitoredLocation(location, removedCamera);
+        }
+
+        return removedCamera;
+    }
+
+    private void removeMonitoredLocation(CameraLocation location, Camera camera) {
+        if(monitoredLocations.containsKey(location)) {
+            List<Camera> locationCameras = monitoredLocations.get(location);
+            locationCameras.remove(camera);
+        }
+    }
+
+    public boolean hasCamerasMonitoring(CameraLocation location) {
+        List<Camera> cameras = getCamerasMonitoring(location);
+        return cameras != null && cameras.size() > 0;
+    }
+
+    public List<Camera> getCamerasMonitoring(CameraLocation location) {
+        return monitoredLocations.get(location);
     }
 }

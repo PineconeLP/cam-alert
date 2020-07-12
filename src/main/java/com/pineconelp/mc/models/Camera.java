@@ -20,22 +20,29 @@ public class Camera {
         ArrayList<CameraLocation> locations = new ArrayList<CameraLocation>();
 
         for (int i = 1; i < range; i++) {
+            int x = location.getX();
+            int y = location.getY();
+            int z = location.getZ();
+
             switch (direction) {
                 case NORTH:
-                    locations.add(new CameraLocation(location.getX(), location.getY(), location.getZ() - i));
+                    z -= i;
                     break;
                 case EAST:
-                    locations.add(new CameraLocation(location.getX() + i, location.getY(), location.getZ()));
+                    x += i;
                     break;
                 case SOUTH:
-                    locations.add(new CameraLocation(location.getX(), location.getY(), location.getZ() + i));
+                    z += i;
                     break;
                 case WEST:
-                    locations.add(new CameraLocation(location.getX() - i, location.getY(), location.getZ()));
+                    x -= i;
                     break;
                 default:
                     break;
             }
+
+            locations.add(new CameraLocation(x, y, z));
+            locations.add(new CameraLocation(x, y - 1, z));
         }
         
         CameraLocation[] arrayLocations = new CameraLocation[locations.size()];
@@ -47,4 +54,8 @@ public class Camera {
     public UUID getOwnerPlayerId() {
         return ownerPlayerId;
     }
+
+	public CameraLocation getLocation() {
+		return location;
+	}
 }
