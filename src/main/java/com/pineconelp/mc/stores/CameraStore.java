@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.pineconelp.mc.exceptions.CameraRemoveException;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
@@ -55,7 +56,7 @@ public class CameraStore {
         }
     }
 
-    public Camera removeCamera(final CameraLocation cameraLocation) throws Exception {
+    public Camera removeCamera(final CameraLocation cameraLocation) throws CameraRemoveException {
         Camera cameraToRemove = getCamera(cameraLocation);
 
         if(cameraToRemove != null) {
@@ -64,7 +65,7 @@ public class CameraStore {
             try {
                 cameraRepository.delete(cameraToRemove.getId());
             } catch (SQLException e) {
-                throw new Exception("Failed to remove camera.", e);
+                throw new CameraRemoveException(cameraToRemove, e);
             }
         }
 

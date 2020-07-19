@@ -28,8 +28,8 @@ import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
 import com.pineconelp.mc.services.camera_repositories.sqlite.DatabaseCameraRepository;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import com.pineconelp.mc.stores.CameraStore;
-import com.pineconelp.mc.utilities.AsyncRunner;
 import com.pineconelp.mc.utilities.DatabaseConnectionFactory;
+import com.pineconelp.mc.utilities.TaskRunner;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.Plugin;
@@ -51,7 +51,7 @@ public class CamAlertModule extends AbstractModule {
         String dataFolderPath = this.app.getDataFolder().getAbsolutePath();
         String connectionString = "jdbc:sqlite:" + dataFolderPath + "\\camalert.db";
         bind(DatabaseConnectionFactory.class).toInstance(new DatabaseConnectionFactory(connectionString));
-        bind(AsyncRunner.class).in(Singleton.class);;        
+        bind(TaskRunner.class).in(Singleton.class);;        
 
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemValidator.class).to(NMSCameraItemFactory.class).in(Singleton.class);

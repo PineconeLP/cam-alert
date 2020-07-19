@@ -6,12 +6,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
-public class AsyncRunner {
+public class TaskRunner {
     private Plugin plugin;
 
     @Inject
-    public AsyncRunner(Plugin plugin) {
+    public TaskRunner(Plugin plugin) {
         this.plugin = plugin;
+    }
+
+    public BukkitTask runTask(Runnable runnable) {
+        return Bukkit.getScheduler().runTask(plugin, runnable);
     }
 
     public BukkitTask runTaskAsync(Runnable runnable) {

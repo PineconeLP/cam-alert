@@ -9,11 +9,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsRepository, ICamAlertSettingsSeeder {
-    private static final double DEFAULT_CAMERA_RANGE = 20;
-    private static final double DEFAULT_NOTIFICATION_THRESHOLD = 1;
-    private static final String DEFAULT_BLOCK_MATERIAL = Material.JACK_O_LANTERN.toString();
-    private static final boolean DEFAULT_ENTITY_NOTIFICATIONS_ENABLED = true;
-
     private static final String SETTINGS_PATH = "settings";
     private static final String DEFAULT_SETTINGS_PATH = SETTINGS_PATH + ".default";
     private static final String DEFAULT_CAMERA_RANGE_PATH = DEFAULT_SETTINGS_PATH + ".cameraRange";
@@ -32,10 +27,10 @@ public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsReposi
 
     @Override
     public void seedSettings() {
-        config.addDefault(DEFAULT_CAMERA_RANGE_PATH, DEFAULT_CAMERA_RANGE);
-        config.addDefault(DEFAULT_NOTIFICATION_THRESHOLD_PATH, DEFAULT_NOTIFICATION_THRESHOLD);
-        config.addDefault(DEFAULT_BLOCK_MATERIAL_PATH, DEFAULT_BLOCK_MATERIAL);
-        config.addDefault(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, DEFAULT_ENTITY_NOTIFICATIONS_ENABLED);
+        config.addDefault(DEFAULT_CAMERA_RANGE_PATH, CamAlertSettings.DEFAULT_CAMERA_RANGE);
+        config.addDefault(DEFAULT_NOTIFICATION_THRESHOLD_PATH, CamAlertSettings.DEFAULT_NOTIFICATION_THRESHOLD);
+        config.addDefault(DEFAULT_BLOCK_MATERIAL_PATH, CamAlertSettings.DEFAULT_BLOCK_MATERIAL);
+        config.addDefault(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, CamAlertSettings.DEFAULT_ENTITY_NOTIFICATIONS_ENABLED);
         config.options().copyDefaults(true);
 
         plugin.saveConfig();
@@ -43,15 +38,15 @@ public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsReposi
 
     @Override
     public CamAlertSettings loadSettings() {
-        double defaultCameraRange = config.getDouble(DEFAULT_CAMERA_RANGE_PATH, DEFAULT_CAMERA_RANGE);
-        double defaultCameraNotificationThresholdSeconds = config.getDouble(DEFAULT_NOTIFICATION_THRESHOLD_PATH, DEFAULT_NOTIFICATION_THRESHOLD);
+        double defaultCameraRange = config.getDouble(DEFAULT_CAMERA_RANGE_PATH, CamAlertSettings.DEFAULT_CAMERA_RANGE);
+        double defaultCameraNotificationThresholdSeconds = config.getDouble(DEFAULT_NOTIFICATION_THRESHOLD_PATH, CamAlertSettings.DEFAULT_NOTIFICATION_THRESHOLD);
 
-        Material defaultCameraBlockMaterial = Material.getMaterial(config.getString(DEFAULT_BLOCK_MATERIAL_PATH, DEFAULT_BLOCK_MATERIAL));
+        Material defaultCameraBlockMaterial = Material.getMaterial(config.getString(DEFAULT_BLOCK_MATERIAL_PATH, CamAlertSettings.DEFAULT_BLOCK_MATERIAL.toString()));
         if(defaultCameraBlockMaterial == null) {
-            defaultCameraBlockMaterial = Material.getMaterial(DEFAULT_BLOCK_MATERIAL);
+            defaultCameraBlockMaterial = CamAlertSettings.DEFAULT_BLOCK_MATERIAL;
         }
 
-        boolean entityNotificationsEnabled = config.getBoolean(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, DEFAULT_ENTITY_NOTIFICATIONS_ENABLED);
+        boolean entityNotificationsEnabled = config.getBoolean(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, CamAlertSettings.DEFAULT_ENTITY_NOTIFICATIONS_ENABLED);
 
         return new CamAlertSettings(defaultCameraRange, defaultCameraNotificationThresholdSeconds, defaultCameraBlockMaterial, entityNotificationsEnabled);
     }

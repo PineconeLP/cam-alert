@@ -9,7 +9,7 @@ import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.models.CameraDirection;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
-import com.pineconelp.mc.utilities.AsyncRunner;
+import com.pineconelp.mc.utilities.TaskRunner;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -25,15 +25,15 @@ public class CameraPlacedListener implements Listener {
     private CameraStore cameraStore;
     private ICameraItemValidator cameraItemValidator;
     private ICameraItemDetailer cameraItemDetailer;
-    private AsyncRunner asyncRunner;
+    private TaskRunner taskRunner;
 
     @Inject
     public CameraPlacedListener(CameraStore cameraStore, ICameraItemValidator cameraItemValidator,
-            ICameraItemDetailer cameraItemDetailer, AsyncRunner asyncRunner) {
+            ICameraItemDetailer cameraItemDetailer, TaskRunner taskRunner) {
         this.cameraStore = cameraStore;
         this.cameraItemValidator = cameraItemValidator;
         this.cameraItemDetailer = cameraItemDetailer;
-        this.asyncRunner = asyncRunner;
+        this.taskRunner = taskRunner;
     }
 
     @EventHandler
@@ -48,7 +48,7 @@ public class CameraPlacedListener implements Listener {
                 CameraDetails cameraDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
                 CameraDetails newCameraDetails = cameraDetails.clone(player.getUniqueId());
 
-                asyncRunner.runTaskAsync(new Runnable() {
+                taskRunner.runTaskAsync(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -59,7 +59,7 @@ public class CameraPlacedListener implements Listener {
 
                             player.sendMessage(ChatColor.GREEN + "Camera saved.");
                         } catch (Exception e) {
-                            player.sendMessage(ChatColor.RED + "Failed to save camera. Pickup this camera or it will be lost on server restart.");
+                            player.sendMessage(ChatColor.RED + "Failed to save camera. Pickup this camera or it will be lost after the next server restart.");
                             e.printStackTrace();
                         }
 					}
