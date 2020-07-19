@@ -14,6 +14,7 @@ import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.models.CameraDirection;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
+import com.pineconelp.mc.utilities.DatabaseConnectionFactory;
 
 public class DatabaseCameraRepository implements ICameraRepository {
 

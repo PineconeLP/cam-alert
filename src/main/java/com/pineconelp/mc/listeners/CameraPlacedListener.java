@@ -9,6 +9,7 @@ import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.models.CameraDirection;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
+import com.pineconelp.mc.utilities.AsyncRunner;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,13 +25,15 @@ public class CameraPlacedListener implements Listener {
     private CameraStore cameraStore;
     private ICameraItemValidator cameraItemValidator;
     private ICameraItemDetailer cameraItemDetailer;
+    private AsyncRunner asyncRunner;
 
     @Inject
     public CameraPlacedListener(CameraStore cameraStore, ICameraItemValidator cameraItemValidator,
-            ICameraItemDetailer cameraItemDetailer) {
+            ICameraItemDetailer cameraItemDetailer, AsyncRunner asyncRunner) {
         this.cameraStore = cameraStore;
         this.cameraItemValidator = cameraItemValidator;
         this.cameraItemDetailer = cameraItemDetailer;
+        this.asyncRunner = asyncRunner;
     }
 
     @EventHandler
@@ -43,17 +46,27 @@ public class CameraPlacedListener implements Listener {
 
             try {
                 CameraDetails cameraDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
-                cameraDetails = cameraDetails.clone(player.getUniqueId());
+                CameraDetails newCameraDetails = cameraDetails.clone(player.getUniqueId());
 
-                cameraStore.addCamera(createCamera(cameraLocation, player, cameraDetails));
+                asyncRunner.runTaskAsync(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            player.sendMessage(ChatColor.GREEN + "Saving camera...");
+                            
+                            Camera createdCamera = createCamera(cameraLocation, player, newCameraDetails);
+                            cameraStore.addCamera(createdCamera);
 
-                player.sendMessage(ChatColor.GREEN + "Camera initialized.");
+                            player.sendMessage(ChatColor.GREEN + "Camera saved.");
+                        } catch (Exception e) {
+                            player.sendMessage(ChatColor.RED + "Failed to save camera. Pickup this camera or it will be lost on server restart.");
+                            e.printStackTrace();
+                        }
+					}
+                });
             } catch (InvalidCameraItemException e) {
                 player.sendMessage(ChatColor.RED + "Invalid camera.");
-            } catch (Exception e) {
-                player.sendMessage(ChatColor.RED + "Failed to save camera. Pickup this camera or it will be lost on server restart.");
-                e.printStackTrace();
-            }
+            } 
         }
     }
 

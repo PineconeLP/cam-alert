@@ -5,6 +5,7 @@ import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.stores.CameraStore;
+import com.pineconelp.mc.utilities.AsyncRunner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,11 +21,14 @@ public class CameraDestroyedListener implements Listener {
 
     private CameraStore cameraStore;
     private ICameraItemFactory cameraItemFactory;
+    private AsyncRunner asyncRunner;
 
     @Inject
-    public CameraDestroyedListener(CameraStore cameraStore, ICameraItemFactory cameraItemFactory) {
+    public CameraDestroyedListener(CameraStore cameraStore, ICameraItemFactory cameraItemFactory,
+            AsyncRunner asyncRunner) {
         this.cameraStore = cameraStore;
         this.cameraItemFactory = cameraItemFactory;
+        this.asyncRunner = asyncRunner;
     }
 
     @EventHandler
@@ -35,22 +39,28 @@ public class CameraDestroyedListener implements Listener {
         if (cameraStore.hasCamera(cameraLocation)) {
             Player blockBreakPlayer = blockBreakEvent.getPlayer();
 
-            try {
-                Camera brokenCamera = cameraStore.removeCamera(cameraLocation);
-                blockBreakPlayer.sendMessage(ChatColor.GREEN + "Camera destroyed.");
-
-                Player cameraOwnerPlayer = Bukkit.getPlayer(brokenCamera.getOwnerPlayerId());
-                if(cameraOwnerPlayer != null && cameraOwnerPlayer != blockBreakPlayer) {
-                    cameraOwnerPlayer.sendMessage(ChatColor.RED + "Your camera was destroyed!");
+            asyncRunner.runTaskAsync(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        blockBreakPlayer.sendMessage(ChatColor.GREEN + "Removing camera...");
+                        Camera brokenCamera = cameraStore.removeCamera(cameraLocation);
+                        blockBreakPlayer.sendMessage(ChatColor.GREEN + "Camera removed.");
+        
+                        Player cameraOwnerPlayer = Bukkit.getPlayer(brokenCamera.getOwnerPlayerId());
+                        if(cameraOwnerPlayer != null && cameraOwnerPlayer != blockBreakPlayer) {
+                            cameraOwnerPlayer.sendMessage(ChatColor.RED + "Your camera was destroyed!");
+                        }
+        
+                        blockBreakEvent.setDropItems(false);
+        
+                        ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getCameraDetails(), 1);
+                        blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                blockBreakEvent.setDropItems(false);
-
-                ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getCameraDetails(), 1);
-                blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            });
         }
     }
 }

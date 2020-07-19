@@ -1,4 +1,4 @@
-package com.pineconelp.mc.services.camera_repositories.sqlite;
+package com.pineconelp.mc.utilities;
 
 import java.sql.SQLException;
 

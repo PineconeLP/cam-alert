@@ -6,7 +6,7 @@ import com.google.inject.Inject;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.pineconelp.mc.services.camera_repositories.sqlite.CameraEntity;
-import com.pineconelp.mc.services.camera_repositories.sqlite.DatabaseConnectionFactory;
+import com.pineconelp.mc.utilities.DatabaseConnectionFactory;
 
 public class CamAlertDatabaseSeeder {
 
