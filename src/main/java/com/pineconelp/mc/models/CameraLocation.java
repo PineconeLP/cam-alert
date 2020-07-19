@@ -59,7 +59,7 @@ public class CameraLocation {
           
         CameraLocation otherCameraLocation = (CameraLocation) other; 
 
-        return worldId == otherCameraLocation.getWorldId() &&
+        return worldId.equals(otherCameraLocation.getWorldId()) &&
             x == otherCameraLocation.getX() &&
             y == otherCameraLocation.getY() &&
             z == otherCameraLocation.getZ();

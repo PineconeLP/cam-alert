@@ -98,7 +98,12 @@ public class Camera {
     public void setId(long id) {
         this.id = id;
     }
-    
+
+    // WIP
+	public String getName() {
+		return "";
+    }
+
 	public CameraLocation getLocation() {
 		return location;
     }

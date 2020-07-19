@@ -1,6 +1,6 @@
 package com.pineconelp.mc.services.camera_repositories.sqlite;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;

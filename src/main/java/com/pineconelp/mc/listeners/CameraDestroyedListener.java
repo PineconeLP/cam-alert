@@ -24,7 +24,7 @@ public class CameraDestroyedListener implements Listener {
     @Inject
     public CameraDestroyedListener(CameraStore cameraStore, ICameraItemFactory cameraItemFactory) {
         this.cameraStore = cameraStore;
-		this.cameraItemFactory = cameraItemFactory;
+        this.cameraItemFactory = cameraItemFactory;
     }
 
     @EventHandler
@@ -32,21 +32,25 @@ public class CameraDestroyedListener implements Listener {
         Location blockBreakLocation = blockBreakEvent.getBlock().getLocation();
         CameraLocation cameraLocation = new CameraLocation(blockBreakLocation);
 
-        if(cameraStore.hasCamera(cameraLocation)) {
-            Camera brokenCamera = cameraStore.removeCamera(cameraLocation);
-
+        if (cameraStore.hasCamera(cameraLocation)) {
             Player blockBreakPlayer = blockBreakEvent.getPlayer();
-            blockBreakPlayer.sendMessage(ChatColor.GREEN + "Camera destroyed.");
 
-            Player cameraOwnerPlayer = Bukkit.getPlayer(brokenCamera.getOwnerPlayerId());
-            if(cameraOwnerPlayer != null && cameraOwnerPlayer != blockBreakPlayer) {
-                cameraOwnerPlayer.sendMessage(ChatColor.RED + "Your camera was destroyed!");
+            try {
+                Camera brokenCamera = cameraStore.removeCamera(cameraLocation);
+                blockBreakPlayer.sendMessage(ChatColor.GREEN + "Camera destroyed.");
+
+                Player cameraOwnerPlayer = Bukkit.getPlayer(brokenCamera.getOwnerPlayerId());
+                if(cameraOwnerPlayer != null && cameraOwnerPlayer != blockBreakPlayer) {
+                    cameraOwnerPlayer.sendMessage(ChatColor.RED + "Your camera was destroyed!");
+                }
+
+                blockBreakEvent.setDropItems(false);
+
+                ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getCameraDetails(), 1);
+                blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            blockBreakEvent.setDropItems(false);
-
-            ItemStack cameraItem = cameraItemFactory.createCameraItem(brokenCamera.getCameraDetails(), 1);
-            blockBreakPlayer.getWorld().dropItemNaturally(blockBreakEvent.getBlock().getLocation(), cameraItem);
         }
     }
 }

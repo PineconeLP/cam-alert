@@ -1,7 +1,5 @@
 package com.pineconelp.mc;
 
-import java.sql.SQLException;
-
 import com.google.inject.Injector;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
@@ -9,6 +7,7 @@ import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
 import com.pineconelp.mc.seeders.Seeder;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
+import com.pineconelp.mc.stores.CameraStore;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -22,15 +21,16 @@ public class App extends JavaPlugin {
 
         Injector injector = new CamAlertModule(this).createInjector();
 
-        // Seed data before loading.
         try {
+            // Seed data before loading.
             injector.getInstance(Seeder.class).seed();
-        } catch (SQLException e) {
+
+            // Load stores before creating dependencies.
+            injector.getInstance(CamAlertSettingsStore.class).loadSettings();
+            injector.getInstance(CameraStore.class).loadCameras();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Load stores before creating dependencies.
-        injector.getInstance(CamAlertSettingsStore.class).loadSettings();
 
         registerCommand("cam", injector.getInstance(CommandExecutor.class));
 

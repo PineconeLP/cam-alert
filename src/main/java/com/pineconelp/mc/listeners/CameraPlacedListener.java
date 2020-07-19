@@ -50,6 +50,9 @@ public class CameraPlacedListener implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Camera initialized.");
             } catch (InvalidCameraItemException e) {
                 player.sendMessage(ChatColor.RED + "Invalid camera.");
+            } catch (Exception e) {
+                player.sendMessage(ChatColor.RED + "Failed to save camera. Pickup this camera or it will be lost on server restart.");
+                e.printStackTrace();
             }
         }
     }
