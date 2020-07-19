@@ -2,12 +2,13 @@ package com.pineconelp.mc.services.cam_alert_settings_repositories;
 
 import com.google.inject.Inject;
 import com.pineconelp.mc.models.CamAlertSettings;
+import com.pineconelp.mc.seeders.ICamAlertSettingsSeeder;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
-public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsRepository {
+public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsRepository, ICamAlertSettingsSeeder {
     private static final double DEFAULT_CAMERA_RANGE = 20;
     private static final double DEFAULT_NOTIFICATION_THRESHOLD = 1;
     private static final String DEFAULT_BLOCK_MATERIAL = Material.JACK_O_LANTERN.toString();
@@ -27,11 +28,10 @@ public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsReposi
     public ConfigCamAlertSettingsRepository(Plugin plugin) {
         this.plugin = plugin;
         this.config = plugin.getConfig();
-
-        seed();
     }
 
-    public void seed() {
+    @Override
+    public void seedSettings() {
         config.addDefault(DEFAULT_CAMERA_RANGE_PATH, DEFAULT_CAMERA_RANGE);
         config.addDefault(DEFAULT_NOTIFICATION_THRESHOLD_PATH, DEFAULT_NOTIFICATION_THRESHOLD);
         config.addDefault(DEFAULT_BLOCK_MATERIAL_PATH, DEFAULT_BLOCK_MATERIAL);
@@ -62,5 +62,7 @@ public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsReposi
         config.set(DEFAULT_NOTIFICATION_THRESHOLD_PATH, settings.getDefaultCameraNotificationThresholdSeconds());
         config.set(DEFAULT_BLOCK_MATERIAL_PATH, settings.getDefaultCameraBlockMaterial());
         config.set(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, settings.isEntityNotificationsEnabled());
+
+        plugin.saveConfig();
     }
 }

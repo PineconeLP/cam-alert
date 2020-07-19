@@ -17,6 +17,8 @@ import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
+import com.pineconelp.mc.seeders.ICamAlertSettingsSeeder;
+import com.pineconelp.mc.seeders.Seeder;
 import com.pineconelp.mc.services.cam_alert_settings_repositories.ConfigCamAlertSettingsRepository;
 import com.pineconelp.mc.services.cam_alert_settings_repositories.ICamAlertSettingsRepository;
 import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
@@ -47,7 +49,9 @@ public class CamAlertModule extends AbstractModule {
 
         bind(ICameraNotifier.class).to(ChatCameraNotifier.class).in(Singleton.class);
 
-        bind(ICamAlertSettingsRepository.class).to(ConfigCamAlertSettingsRepository.class).in(Singleton.class);
+        bind(ConfigCamAlertSettingsRepository.class).in(Singleton.class);
+        bind(ICamAlertSettingsRepository.class).to(ConfigCamAlertSettingsRepository.class);
+        bind(ICamAlertSettingsSeeder.class).to(ConfigCamAlertSettingsRepository.class);
 
         bind(CameraStore.class).in(Singleton.class);
         bind(CamAlertSettingsStore.class).in(Singleton.class);
@@ -61,6 +65,8 @@ public class CamAlertModule extends AbstractModule {
         bind(PlayerCameraMovementListener.class).in(Singleton.class);
 
         bind(EntityCameraMovementRunnable.class).in(Singleton.class);
+
+        bind(Seeder.class).in(Singleton.class);
 
         bind(Plugin.class).toInstance(app);
     }
