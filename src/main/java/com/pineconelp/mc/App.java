@@ -1,14 +1,10 @@
 package com.pineconelp.mc;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
-import com.pineconelp.mc.runnables.IBukkitRunnableInitializer;
-import com.pineconelp.mc.runnables.IBukkitRunnableInitializerFactory;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -20,7 +16,7 @@ public class App extends JavaPlugin {
     public void onEnable() {
         getLogger().info("CamAlert enabled.");
 
-        Injector injector = Guice.createInjector(new CamAlertModule());
+        Injector injector = new CamAlertModule(this).createInjector();
 
         registerCommand("cam", injector.getInstance(CommandExecutor.class));
 
@@ -28,7 +24,7 @@ public class App extends JavaPlugin {
         registerListener(injector.getInstance(CameraDestroyedListener.class));
         registerListener(injector.getInstance(PlayerCameraMovementListener.class));
 
-        initializeRunnable(injector.getInstance(new Key<IBukkitRunnableInitializerFactory<EntityCameraMovementRunnable>>() {}));
+        injector.getInstance(EntityCameraMovementRunnable.class).initialize();
     }
 
     @Override
@@ -42,10 +38,5 @@ public class App extends JavaPlugin {
 
     private void registerListener(Listener cameraPlacedEventListener) {
         getServer().getPluginManager().registerEvents(cameraPlacedEventListener, this);
-    }
-
-    private <T extends IBukkitRunnableInitializer> void initializeRunnable(IBukkitRunnableInitializerFactory<T> bukkitRunnableFactory) {
-        IBukkitRunnableInitializer bukkitRunnableInitializer = bukkitRunnableFactory.createBukkitRunnable(this);
-        bukkitRunnableInitializer.initialize();
     }
 }

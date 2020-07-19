@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
@@ -20,7 +19,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class EntityCameraMovementRunnable extends BukkitRunnable implements IBukkitRunnableInitializer {
+public class EntityCameraMovementRunnable extends BukkitRunnable {
 
     private Plugin plugin;
     private CameraStore cameraStore;
@@ -30,7 +29,7 @@ public class EntityCameraMovementRunnable extends BukkitRunnable implements IBuk
     private BukkitTask currentTask;
 
     @Inject
-    public EntityCameraMovementRunnable(@Assisted Plugin plugin, CameraStore cameraStore,
+    public EntityCameraMovementRunnable(Plugin plugin, CameraStore cameraStore,
             CamAlertSettingsStore settingsStore,
             ICameraNotifier cameraNotifier) {
         this.plugin = plugin;
