@@ -8,7 +8,7 @@ public class CamAlertSettingsStore {
     private CamAlertSettings camAlertSettings;
     
     public CamAlertSettingsStore() {
-        camAlertSettings = new CamAlertSettings(10, 5, Material.JACK_O_LANTERN);
+        camAlertSettings = new CamAlertSettings(10, 5, Material.JACK_O_LANTERN, false);
     }
 
     public double getDefaultCameraRange() {
@@ -21,5 +21,9 @@ public class CamAlertSettingsStore {
 
     public Material getDefaultCameraBlockMaterial() {
         return camAlertSettings.getDefaultCameraBlockMaterial();
+    }
+
+    public boolean isEntityNotificationsEnabled() {
+        return camAlertSettings.isEntityNotificationsEnabled();
     }
 }

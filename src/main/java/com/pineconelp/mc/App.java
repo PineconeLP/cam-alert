@@ -2,15 +2,17 @@ package com.pineconelp.mc;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
+import com.pineconelp.mc.runnables.IBukkitRunnableInitializer;
+import com.pineconelp.mc.runnables.IBukkitRunnableInitializerFactory;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class App extends JavaPlugin {
 
@@ -26,7 +28,7 @@ public class App extends JavaPlugin {
         registerListener(injector.getInstance(CameraDestroyedListener.class));
         registerListener(injector.getInstance(PlayerCameraMovementListener.class));
 
-        registerRepeatingSyncTask(injector.getInstance(EntityCameraMovementRunnable.class), 10L);
+        initializeRunnable(injector.getInstance(new Key<IBukkitRunnableInitializerFactory<EntityCameraMovementRunnable>>() {}));
     }
 
     @Override
@@ -42,7 +44,8 @@ public class App extends JavaPlugin {
         getServer().getPluginManager().registerEvents(cameraPlacedEventListener, this);
     }
 
-    private void registerRepeatingSyncTask(BukkitRunnable runnable, long interval) {
-        runnable.runTaskTimer(this, 0L, interval);
+    private <T extends IBukkitRunnableInitializer> void initializeRunnable(IBukkitRunnableInitializerFactory<T> bukkitRunnableFactory) {
+        IBukkitRunnableInitializer bukkitRunnableInitializer = bukkitRunnableFactory.createBukkitRunnable(this);
+        bukkitRunnableInitializer.initialize();
     }
 }

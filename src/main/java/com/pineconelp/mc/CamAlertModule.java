@@ -1,7 +1,9 @@
 package com.pineconelp.mc;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Singleton;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
 import com.pineconelp.mc.commands.ICommandHandler;
 import com.pineconelp.mc.commands.CamAlertCommand;
@@ -15,6 +17,7 @@ import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
+import com.pineconelp.mc.runnables.IBukkitRunnableInitializerFactory;
 import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
 import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
@@ -43,6 +46,8 @@ public class CamAlertModule extends AbstractModule {
         bind(CameraDestroyedListener.class);
         bind(PlayerCameraMovementListener.class);
 
-        bind(EntityCameraMovementRunnable.class).in(Singleton.class);
+        install(new FactoryModuleBuilder()
+            .implement(EntityCameraMovementRunnable.class, EntityCameraMovementRunnable.class)
+            .build(new Key<IBukkitRunnableInitializerFactory<EntityCameraMovementRunnable>>(){}));
     }
 }

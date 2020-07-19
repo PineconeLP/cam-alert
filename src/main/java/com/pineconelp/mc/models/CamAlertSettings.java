@@ -6,12 +6,14 @@ public class CamAlertSettings {
     private double defaultCameraRange;
     private double defaultCameraNotificationThresholdSeconds;
     private Material defaultCameraBlockMaterial;
+    private boolean entityNotificationsEnabled;
 
     public CamAlertSettings(double defaultCameraRange, double defaultCameraNotificationThresholdSeconds,
-            Material defaultCameraBlockMaterial) {
+            Material defaultCameraBlockMaterial, boolean entityNotificationsEnabled) {
         this.defaultCameraRange = defaultCameraRange;
         this.defaultCameraNotificationThresholdSeconds = defaultCameraNotificationThresholdSeconds;
         this.defaultCameraBlockMaterial = defaultCameraBlockMaterial;
+        this.entityNotificationsEnabled = entityNotificationsEnabled;
     }
 
     public double getDefaultCameraRange() {
@@ -36,5 +38,13 @@ public class CamAlertSettings {
 
     public void setDefaultCameraBlockMaterial(Material defaultCameraBlockMaterial) {
         this.defaultCameraBlockMaterial = defaultCameraBlockMaterial;
+    }
+
+    public boolean isEntityNotificationsEnabled() {
+        return entityNotificationsEnabled;
+    }
+
+    public void setEntityNotificationsEnabled(boolean entityNotificationsEnabled) {
+        this.entityNotificationsEnabled = entityNotificationsEnabled;
     }
 }

@@ -6,7 +6,7 @@
 
   <groupId>com.pineconelp.mc</groupId>
   <artifactId>CamAlert</artifactId>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <packaging>jar</packaging>
 
   <name>CamAlert</name>
@@ -45,6 +45,11 @@
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
       <version>4.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-assistedinject</artifactId>
+      <version>4.2.2</version>
     </dependency>
   </dependencies>
 
