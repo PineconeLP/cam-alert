@@ -4,7 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
-import com.pineconelp.mc.runnables.CameraCheckRunnable;
+import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
+import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -23,8 +24,9 @@ public class App extends JavaPlugin {
 
         registerListener(injector.getInstance(CameraPlacedListener.class));
         registerListener(injector.getInstance(CameraDestroyedListener.class));
+        registerListener(injector.getInstance(PlayerCameraMovementListener.class));
 
-        registerRepeatingSyncTask(injector.getInstance(CameraCheckRunnable.class), 10L);
+        registerRepeatingSyncTask(injector.getInstance(EntityCameraMovementRunnable.class), 10L);
     }
 
     @Override

@@ -13,15 +13,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class CameraCheckRunnable extends BukkitRunnable {
+public class EntityCameraMovementRunnable extends BukkitRunnable {
 
     private CameraStore cameraStore;
     private ICameraNotifier cameraNotifier;
 
     @Inject
-    public CameraCheckRunnable(CameraStore cameraStore, ICameraNotifier cameraNotifier) {
+    public EntityCameraMovementRunnable(CameraStore cameraStore, ICameraNotifier cameraNotifier) {
         this.cameraStore = cameraStore;
         this.cameraNotifier = cameraNotifier;
     }
@@ -38,15 +39,18 @@ public class CameraCheckRunnable extends BukkitRunnable {
             Collection<Entity> entitiesInCameraSight = cameraWorld.getNearbyEntities(cameraWorldLocation, cameraRange, cameraRange, cameraRange);
 
             for (Entity entity : entitiesInCameraSight) {
-                Location location = entity.getLocation();
+                boolean isPlayer = entity instanceof Player;
+                boolean isMoving = entity.getVelocity().getX() != 0 || entity.getVelocity().getZ() != 0 || !entity.isOnGround();
 
-                if(camera.isMonitoring(location)) {
-                    UUID entityId = entity.getUniqueId();
+                if(!isPlayer && isMoving) {
+                    Location location = entity.getLocation();
 
-                    if(camera.canAddNotificationForEntity(entityId)) {
-                        camera.addEntityNotification(entityId);
-                        
-                        cameraNotifier.notify(camera, entity);
+                    if(camera.isMonitoring(location)) {
+                        UUID entityId = entity.getUniqueId();
+    
+                        if(camera.addEntityNotification(entityId)) {
+                            cameraNotifier.notify(camera, entity);
+                        }
                     }
                 }
             }

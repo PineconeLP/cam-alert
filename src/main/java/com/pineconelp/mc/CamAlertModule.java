@@ -13,7 +13,8 @@ import com.pineconelp.mc.items.cameras.ICameraItemValidator;
 import com.pineconelp.mc.items.cameras.NMSCameraItemFactory;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
-import com.pineconelp.mc.runnables.CameraCheckRunnable;
+import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
+import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
 import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
 import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
@@ -40,7 +41,8 @@ public class CamAlertModule extends AbstractModule {
 
         bind(CameraPlacedListener.class);
         bind(CameraDestroyedListener.class);
+        bind(PlayerCameraMovementListener.class);
 
-        bind(CameraCheckRunnable.class).in(Singleton.class);
+        bind(EntityCameraMovementRunnable.class).in(Singleton.class);
     }
 }

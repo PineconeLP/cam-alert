@@ -63,11 +63,18 @@ public class Camera {
 		return monitoredLocations.contains(cameraTargetLocation);
 	}
 
-    public void addEntityNotification(UUID entityId) {
-        notifications.put(entityId, new Date());
+    public boolean addEntityNotification(UUID entityId) {
+        boolean success = false;
+
+        if(canAddNotificationForEntity(entityId)) {
+            notifications.put(entityId, new Date());
+            success = true;
+        }
+
+        return success;
     }
 
-    public boolean canAddNotificationForEntity(UUID entityId) {
+    private boolean canAddNotificationForEntity(UUID entityId) {
         Date lastPlayerNotification = getLastNotificationForEntity(entityId);
 		Date notificationThreshold = new Date(System.currentTimeMillis() - (int)(getNotificationThresholdSeconds() * 1000));
 
