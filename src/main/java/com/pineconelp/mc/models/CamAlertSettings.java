@@ -8,6 +8,8 @@ public class CamAlertSettings {
     private Material defaultCameraBlockMaterial;
     private boolean entityNotificationsEnabled;
 
+    public CamAlertSettings() { }
+
     public CamAlertSettings(double defaultCameraRange, double defaultCameraNotificationThresholdSeconds,
             Material defaultCameraBlockMaterial, boolean entityNotificationsEnabled) {
         this.defaultCameraRange = defaultCameraRange;

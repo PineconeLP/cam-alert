@@ -5,6 +5,7 @@ import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
+import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -17,6 +18,8 @@ public class App extends JavaPlugin {
         getLogger().info("CamAlert enabled.");
 
         Injector injector = new CamAlertModule(this).createInjector();
+
+        injector.getInstance(CamAlertSettingsStore.class).loadSettings();
 
         registerCommand("cam", injector.getInstance(CommandExecutor.class));
 

@@ -13,7 +13,7 @@ public class CamAlertSettingsStore {
     @Inject
     public CamAlertSettingsStore(ICamAlertSettingsRepository camAlertSettingsRepository) {
         this.camAlertSettingsRepository = camAlertSettingsRepository;
-        camAlertSettings = new CamAlertSettings(10, 5, Material.JACK_O_LANTERN, true);
+        this.camAlertSettings = new CamAlertSettings();
     }
 
     public void loadSettings() {
