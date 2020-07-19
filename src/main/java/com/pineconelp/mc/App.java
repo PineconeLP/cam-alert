@@ -1,5 +1,7 @@
 package com.pineconelp.mc;
 
+import java.sql.SQLException;
+
 import com.google.inject.Injector;
 import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
@@ -21,7 +23,11 @@ public class App extends JavaPlugin {
         Injector injector = new CamAlertModule(this).createInjector();
 
         // Seed data before loading.
-        injector.getInstance(Seeder.class).seed();
+        try {
+            injector.getInstance(Seeder.class).seed();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         // Load stores before creating dependencies.
         injector.getInstance(CamAlertSettingsStore.class).loadSettings();

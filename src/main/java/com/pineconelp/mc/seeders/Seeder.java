@@ -1,17 +1,22 @@
 package com.pineconelp.mc.seeders;
 
+import java.sql.SQLException;
+
 import com.google.inject.Inject;
 
 public class Seeder {
-    
-    private ICamAlertSettingsSeeder camAlertSettingsSeeder;
+
+    private CamAlertDatabaseSeeder databaseSeeder;
+    private ICamAlertSettingsSeeder settingsSeeder;
 
     @Inject
-    public Seeder(ICamAlertSettingsSeeder camAlertSettingsSeeder) {
-        this.camAlertSettingsSeeder = camAlertSettingsSeeder;
+    public Seeder(CamAlertDatabaseSeeder databaseSeeder, ICamAlertSettingsSeeder settingsSeeder) {
+        this.databaseSeeder = databaseSeeder;
+        this.settingsSeeder = settingsSeeder;
     }
 
-    public void seed() {
-        camAlertSettingsSeeder.seedSettings();
+    public void seed() throws SQLException {
+        databaseSeeder.seedDatabase();
+        settingsSeeder.seedSettings();
     }
 }

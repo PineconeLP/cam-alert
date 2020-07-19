@@ -17,12 +17,16 @@ import com.pineconelp.mc.listeners.CameraDestroyedListener;
 import com.pineconelp.mc.listeners.CameraPlacedListener;
 import com.pineconelp.mc.listeners.PlayerCameraMovementListener;
 import com.pineconelp.mc.runnables.EntityCameraMovementRunnable;
+import com.pineconelp.mc.seeders.CamAlertDatabaseSeeder;
 import com.pineconelp.mc.seeders.ICamAlertSettingsSeeder;
 import com.pineconelp.mc.seeders.Seeder;
 import com.pineconelp.mc.services.cam_alert_settings_repositories.ConfigCamAlertSettingsRepository;
 import com.pineconelp.mc.services.cam_alert_settings_repositories.ICamAlertSettingsRepository;
 import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
 import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
+import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
+import com.pineconelp.mc.services.camera_repositories.sqlite.DatabaseCameraRepository;
+import com.pineconelp.mc.services.camera_repositories.sqlite.DatabaseConnectionFactory;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import com.pineconelp.mc.stores.CameraStore;
 
@@ -43,6 +47,10 @@ public class CamAlertModule extends AbstractModule {
 
 	@Override
     protected void configure() {
+        String dataFolderPath = this.app.getDataFolder().getAbsolutePath();
+        String connectionString = "jdbc:sqlite:" + dataFolderPath + "\\camalert.db";
+        bind(DatabaseConnectionFactory.class).toInstance(new DatabaseConnectionFactory(connectionString));
+
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemValidator.class).to(NMSCameraItemFactory.class).in(Singleton.class);
         bind(ICameraItemDetailer.class).to(NMSCameraItemFactory.class).in(Singleton.class);
@@ -53,6 +61,8 @@ public class CamAlertModule extends AbstractModule {
         bind(ICamAlertSettingsRepository.class).to(ConfigCamAlertSettingsRepository.class);
         bind(ICamAlertSettingsSeeder.class).to(ConfigCamAlertSettingsRepository.class);
 
+        bind(ICameraRepository.class).to(DatabaseCameraRepository.class).in(Singleton.class);
+        
         bind(CameraStore.class).in(Singleton.class);
         bind(CamAlertSettingsStore.class).in(Singleton.class);
 
@@ -66,6 +76,7 @@ public class CamAlertModule extends AbstractModule {
 
         bind(EntityCameraMovementRunnable.class).in(Singleton.class);
 
+        bind(CamAlertDatabaseSeeder.class).in(Singleton.class);
         bind(Seeder.class).in(Singleton.class);
 
         bind(Plugin.class).toInstance(app);
