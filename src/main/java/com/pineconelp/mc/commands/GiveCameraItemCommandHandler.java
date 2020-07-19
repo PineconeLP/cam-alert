@@ -1,10 +1,13 @@
 package com.pineconelp.mc.commands;
 
+import java.util.UUID;
+
 import com.google.inject.Inject;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,8 +33,11 @@ public class GiveCameraItemCommandHandler implements ICommandHandler {
 
             double cameraRange = camAlertSettingsStore.getDefaultCameraRange();
             double cameraNotificationThresholdSeconds = camAlertSettingsStore.getDefaultCameraNotificationThresholdSeconds();
+            UUID ownerId = player.getUniqueId();
 
             if (args.length > 0) {
+
+                // Get camera range.
                 try {
                     cameraRange = Double.parseDouble(args[0]);
                 } catch (Exception e) {
@@ -39,17 +45,34 @@ public class GiveCameraItemCommandHandler implements ICommandHandler {
                 }
 
                 if (args.length > 1) {
+
+                    // Get notification threshold.
                     try {
                         cameraNotificationThresholdSeconds = Double.parseDouble(args[1]);
                     } catch (Exception e) {
                         player.sendMessage(String.format(ChatColor.RED + "Invalid camera notification threshold seconds '%s'. Using default of %d.", args[1], (int)cameraNotificationThresholdSeconds));
                     }
+
+                    if (args.length > 2) {
+
+                        // Get owner player.
+                        String ownerPlayerName = args[2];
+                        Player ownerPlayer = Bukkit.getPlayer(ownerPlayerName);
+
+                        if(ownerPlayer != null) {
+                            ownerId = ownerPlayer.getUniqueId();
+                        } else {
+                            player.sendMessage(String.format(ChatColor.RED + "Online player '%s' not found. Assigning '%s' as camera owner.", ownerPlayerName, player.getName()));
+                        }
+                    }
                 }
             }
 
-            CameraDetails details = new CameraDetails(cameraRange, cameraNotificationThresholdSeconds);
+            CameraDetails details = new CameraDetails(cameraRange, cameraNotificationThresholdSeconds, ownerId);
             ItemStack cameraItem = cameraItemFactory.createCameraItem(details, 1);
+
             player.getInventory().addItem(cameraItem);
+            player.sendMessage(ChatColor.GREEN + "Camera created.");
 
             return true;
         }

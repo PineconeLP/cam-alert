@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 
 public class Camera {
-    private UUID ownerPlayerId;
+    private UUID id;
     private CameraLocation location;
     private CameraDirection direction;
     private CameraDetails cameraDetails;
@@ -16,10 +16,9 @@ public class Camera {
     private HashMap<UUID, Date> notifications;
     private HashSet<CameraLocation> monitoredLocations;
 
-    public Camera(CameraLocation location, CameraDirection direction, UUID ownerPlayerId, CameraDetails cameraDetails) {
+    public Camera(UUID id, CameraLocation location, CameraDirection direction, CameraDetails cameraDetails) {
         this.location = location;
         this.direction = direction;
-        this.ownerPlayerId = ownerPlayerId;
         this.cameraDetails = cameraDetails;
 
         this.notifications = new HashMap<>();
@@ -79,8 +78,20 @@ public class Camera {
         return notifications.get(entityId);
     }
 
+    public UUID getId() {
+        return id;
+    }
+    
+	public CameraLocation getLocation() {
+		return location;
+    }
+
+    public CameraDirection getCameraDirection() {
+        return direction;
+    }
+    
     public UUID getOwnerPlayerId() {
-        return ownerPlayerId;
+        return cameraDetails.getOwnerPlayerId();
     }
 
     public CameraDetails getCameraDetails() {
@@ -95,7 +106,4 @@ public class Camera {
         return cameraDetails.getNotificationThresholdSeconds();
     }
 
-	public CameraLocation getLocation() {
-		return location;
-	}
 }

@@ -1,5 +1,7 @@
 package com.pineconelp.mc.listeners;
 
+import java.util.UUID;
+
 import com.google.inject.Inject;
 import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemValidator;
@@ -43,6 +45,8 @@ public class CameraPlacedListener implements Listener {
 
             try {
                 CameraDetails cameraDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
+                cameraDetails = cameraDetails.clone(player.getUniqueId());
+
                 cameraStore.addCamera(createCamera(cameraLocation, player, cameraDetails));
 
                 player.sendMessage(ChatColor.GREEN + "Camera initialized.");
@@ -57,7 +61,7 @@ public class CameraPlacedListener implements Listener {
         CameraDirection cameraDirection = getCameraDirection(playerYaw);
         CameraLocation cameraLocation = new CameraLocation(placedLocation);
 
-        return new Camera(cameraLocation, cameraDirection, player.getUniqueId(), cameraDetails);
+        return new Camera(UUID.randomUUID(), cameraLocation, cameraDirection, cameraDetails);
     }
 
     private CameraDirection getCameraDirection(float playerYaw) {
