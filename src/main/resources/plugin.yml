@@ -1,6 +1,6 @@
 main: com.pineconelp.mc.App
 name: CamAlert
-version: 0.0.4
+version: 0.0.5
 commands:
     cam:
         description: The main command for using CamAlert.
