@@ -1,4 +1,4 @@
-package com.pineconelp.mc.services.camera_repositories.sqlite;
+package com.pineconelp.mc.services.camera_repositories.database;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -6,30 +6,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.support.ConnectionSource;
 import com.pineconelp.mc.models.Camera;
 import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.models.CameraDirection;
 import com.pineconelp.mc.models.CameraLocation;
 import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
-import com.pineconelp.mc.utilities.DatabaseConnectionFactory;
+import com.pineconelp.mc.utilities.DatabaseSessionFactory;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class DatabaseCameraRepository implements ICameraRepository {
 
-    private DatabaseConnectionFactory connectionFactory;
-
-    private Dao<CameraEntity, Long> cameraDao;
+    private DatabaseSessionFactory sessionFactory;
 
     @Inject
-    public DatabaseCameraRepository(DatabaseConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public DatabaseCameraRepository(DatabaseSessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Camera> getAll() throws SQLException {
-        return getDao().queryForAll().stream().map(this::cameraEntityToCamera).collect(Collectors.toList());
+        try(Session session = sessionFactory.createSession()) {
+            return session.createQuery("from CameraEntity", CameraEntity.class).getResultStream()
+                .map(this::cameraEntityToCamera)
+                .collect(Collectors.toList());
+        }
     }
 
     private Camera cameraEntityToCamera(CameraEntity entity) {
@@ -42,12 +44,16 @@ public class DatabaseCameraRepository implements ICameraRepository {
 
     @Override
     public Camera create(Camera camera) throws SQLException {
-        CameraEntity cameraEntity = cameraToCameraEntity(camera);
-        
-        getDao().create(cameraEntity);
-        camera.setId(cameraEntity.getId());
+        try(Session session = sessionFactory.createSession()) {
+            CameraEntity cameraEntity = cameraToCameraEntity(camera);
 
-        return camera;
+            Transaction transaction = session.beginTransaction();
+            session.persist(cameraEntity);
+            camera.setId(cameraEntity.getId());
+            transaction.commit();
+
+            return camera;
+        }
     }
 
     private CameraEntity cameraToCameraEntity(Camera camera) {
@@ -70,15 +76,13 @@ public class DatabaseCameraRepository implements ICameraRepository {
 
     @Override
     public void delete(long id) throws SQLException {
-        getDao().deleteById(id);
-    }
+        try(Session session = sessionFactory.createSession()) {
+            CameraEntity cameraEntity = new CameraEntity();
+            cameraEntity.setId(id);
 
-    private Dao<CameraEntity, Long> getDao() throws SQLException {
-        if(cameraDao == null) {
-            ConnectionSource connection = connectionFactory.createConnection();
-            cameraDao = DaoManager.createDao(connection, CameraEntity.class);
+            Transaction transaction = session.beginTransaction();
+            session.remove(cameraEntity);
+            transaction.commit();
         }
-
-        return cameraDao;
     }
 }

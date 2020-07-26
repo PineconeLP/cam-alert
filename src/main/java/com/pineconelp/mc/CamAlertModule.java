@@ -25,10 +25,10 @@ import com.pineconelp.mc.services.cam_alert_settings_repositories.ICamAlertSetti
 import com.pineconelp.mc.services.camera_notifiers.ChatCameraNotifier;
 import com.pineconelp.mc.services.camera_notifiers.ICameraNotifier;
 import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
-import com.pineconelp.mc.services.camera_repositories.sqlite.DatabaseCameraRepository;
+import com.pineconelp.mc.services.camera_repositories.database.DatabaseCameraRepository;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import com.pineconelp.mc.stores.CameraStore;
-import com.pineconelp.mc.utilities.DatabaseConnectionFactory;
+import com.pineconelp.mc.utilities.DatabaseSessionFactory;
 import com.pineconelp.mc.utilities.TaskRunner;
 
 import org.bukkit.command.CommandExecutor;
@@ -41,16 +41,16 @@ public class CamAlertModule extends AbstractModule {
     public CamAlertModule(App app) {
         this.app = app;
     }
-    
+
     public Injector createInjector() {
         return Guice.createInjector(this);
     }
 
-	@Override
+    @Override
     protected void configure() {
         String dataFolderPath = this.app.getDataFolder().getAbsolutePath();
-        String connectionString = "jdbc:sqlite:" + dataFolderPath + "\\camalert.db";
-        bind(DatabaseConnectionFactory.class).toInstance(new DatabaseConnectionFactory(connectionString));
+        String connectionString = "jdbc:h2:file:" + dataFolderPath + "\\camalert.db;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE;";
+        bind(DatabaseSessionFactory.class).toInstance(new DatabaseSessionFactory(connectionString));
         bind(TaskRunner.class).in(Singleton.class);;        
 
         bind(ICameraItemFactory.class).to(NMSCameraItemFactory.class).in(Singleton.class);
