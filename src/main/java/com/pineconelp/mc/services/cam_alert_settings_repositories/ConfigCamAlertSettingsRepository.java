@@ -29,7 +29,7 @@ public class ConfigCamAlertSettingsRepository implements ICamAlertSettingsReposi
     public void seedSettings() {
         config.addDefault(DEFAULT_CAMERA_RANGE_PATH, CamAlertSettings.DEFAULT_CAMERA_RANGE);
         config.addDefault(DEFAULT_NOTIFICATION_THRESHOLD_PATH, CamAlertSettings.DEFAULT_NOTIFICATION_THRESHOLD);
-        config.addDefault(DEFAULT_BLOCK_MATERIAL_PATH, CamAlertSettings.DEFAULT_BLOCK_MATERIAL);
+        config.addDefault(DEFAULT_BLOCK_MATERIAL_PATH, CamAlertSettings.DEFAULT_BLOCK_MATERIAL.toString());
         config.addDefault(DEFAULT_ENTITY_NOTIFICATIONS_ENABLED_PATH, CamAlertSettings.DEFAULT_ENTITY_NOTIFICATIONS_ENABLED);
         config.options().copyDefaults(true);
 
