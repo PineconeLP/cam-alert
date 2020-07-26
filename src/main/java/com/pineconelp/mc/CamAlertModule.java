@@ -6,8 +6,9 @@ import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.pineconelp.mc.commands.ICommandHandler;
+import com.pineconelp.mc.commands.UpdateCommandHandler;
 import com.pineconelp.mc.commands.CamAlertCommand;
-import com.pineconelp.mc.commands.GiveCameraItemCommandHandler;
+import com.pineconelp.mc.commands.CreateCommandHandler;
 import com.pineconelp.mc.commands.WelcomeCommandHandler;
 import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
@@ -69,7 +70,8 @@ public class CamAlertModule extends AbstractModule {
         bind(CamAlertSettingsStore.class).in(Singleton.class);
 
         bind(ICommandHandler.class).annotatedWith(Names.named("NoArgsHandler")).to(WelcomeCommandHandler.class).in(Singleton.class);
-        bind(ICommandHandler.class).annotatedWith(Names.named("GiveCameraItemCommandHandler")).to(GiveCameraItemCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("CreateCommandHandler")).to(CreateCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("UpdateCommandHandler")).to(UpdateCommandHandler.class).in(Singleton.class);
         bind(CommandExecutor.class).to(CamAlertCommand.class).in(Singleton.class);
 
         bind(CameraPlacedListener.class).in(Singleton.class);

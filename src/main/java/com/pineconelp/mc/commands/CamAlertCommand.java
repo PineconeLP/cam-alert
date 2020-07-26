@@ -14,13 +14,16 @@ import net.md_5.bungee.api.ChatColor;
 public class CamAlertCommand implements CommandExecutor {
 
     private ICommandHandler noArgsHandler;
-    private ICommandHandler giveCameraCommandHandler;
+    private ICommandHandler createHandler;
+    private ICommandHandler updateHandler;
 
     @Inject
     public CamAlertCommand(@Named("NoArgsHandler") ICommandHandler noArgsHandler,
-            @Named("GiveCameraItemCommandHandler") ICommandHandler giveCameraCommandHandler) {
+            @Named("CreateCommandHandler") ICommandHandler createHandler,
+            @Named("UpdateCommandHandler") ICommandHandler updateHandler) {
         this.noArgsHandler = noArgsHandler;
-        this.giveCameraCommandHandler = giveCameraCommandHandler;
+        this.createHandler = createHandler;
+        this.updateHandler = updateHandler;
     }
 
     @Override
@@ -29,7 +32,9 @@ public class CamAlertCommand implements CommandExecutor {
             return noArgsHandler.handle(sender, args);
         } else {
             if(args[0].equalsIgnoreCase("create")) {
-                return giveCameraCommandHandler.handle(sender, Arrays.copyOfRange(args, 1, args.length));
+                return createHandler.handle(sender, Arrays.copyOfRange(args, 1, args.length));
+            } else if(args[0].equalsIgnoreCase("update")) {
+                return updateHandler.handle(sender, Arrays.copyOfRange(args, 1, args.length));
             }
         }
 
