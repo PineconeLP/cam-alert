@@ -19,22 +19,22 @@ public class Permission {
     /**
      * Update camera to any range.
      */
-    public static final String CAM_ALERT_CREATE_RANGE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range";
+    public static final String CAM_ALERT_UPDATE_RANGE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range";
     
     /**
      * Update camera with minimum range [x].
      */
-    public static final String CAM_ALERT_CREATE_MIN_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".minrange.";
+    public static final String CAM_ALERT_UPDATE_MIN_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".minrange.";
     
     /**
      * Update camera with maximum range [x].
      */
-    public static final String CAM_ALERT_CREATE_MAX_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".maxrange.";
+    public static final String CAM_ALERT_UPDATE_MAX_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".maxrange.";
     
     /**
      * Update camera with specific range [x].
      */
-    public static final String CAM_ALERT_CREATE_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range.";
+    public static final String CAM_ALERT_UPDATE_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range.";
     
     /**
      * Update camera with any notification threshold seconds.
