@@ -46,7 +46,7 @@ public class CameraPlacedListener implements Listener {
 
             try {
                 CameraDetails cameraDetails = cameraItemDetailer.getCameraItemDetails(itemPlaced);
-                CameraDetails newCameraDetails = cameraDetails.clone(player.getUniqueId());
+                CameraDetails newCameraDetails = cameraDetails.cloneWithOwnerPlayerId(player.getUniqueId());
 
                 taskRunner.runTaskAsync(new Runnable() {
                     @Override

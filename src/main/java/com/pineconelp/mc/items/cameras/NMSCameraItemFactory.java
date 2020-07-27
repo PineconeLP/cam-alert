@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import com.google.inject.Inject;
+import com.pineconelp.mc.constants.CameraItemNMSTag;
 import com.pineconelp.mc.models.CameraDetails;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
@@ -20,11 +21,6 @@ import net.minecraft.server.v1_16_R1.NBTTagInt;
 import net.minecraft.server.v1_16_R1.NBTTagString;
 
 public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemValidator, ICameraItemDetailer {
-
-    private static final String VERIFIED_TAG_NAME = "verified";
-    private static final String RANGE_TAG_NAME = "range";
-    private static final String NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME = "notification_threshold_seconds";
-    private static final String OWNER_ID_TAG_NAME = "owner_id";
 
     private CamAlertSettingsStore camAlertSettingsStore;
 
@@ -59,10 +55,10 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         net.minecraft.server.v1_16_R1.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(cameraItem);
 
         NBTTagCompound cameraItemTag = craftCameraItem.hasTag() ? craftCameraItem.getTag() : new NBTTagCompound();
-        cameraItemTag.set(VERIFIED_TAG_NAME, NBTTagInt.a(1));
-        cameraItemTag.set(RANGE_TAG_NAME, NBTTagDouble.a(range));
-        cameraItemTag.set(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME, NBTTagDouble.a(notificationThresholdSeconds));
-        cameraItemTag.set(OWNER_ID_TAG_NAME, NBTTagString.a(playerId.toString()));
+        cameraItemTag.set(CameraItemNMSTag.VERIFIED_TAG_NAME, NBTTagInt.a(1));
+        cameraItemTag.set(CameraItemNMSTag.RANGE_TAG_NAME, NBTTagDouble.a(range));
+        cameraItemTag.set(CameraItemNMSTag.NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME, NBTTagDouble.a(notificationThresholdSeconds));
+        cameraItemTag.set(CameraItemNMSTag.OWNER_ID_TAG_NAME, NBTTagString.a(playerId.toString()));
 
         craftCameraItem.setTag(cameraItemTag);
 
@@ -86,7 +82,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         if(craftCameraItem.hasTag()) {
             NBTTagCompound cameraItemTag = craftCameraItem.getTag();
             
-            return cameraItemTag.hasKey(VERIFIED_TAG_NAME);
+            return cameraItemTag.hasKey(CameraItemNMSTag.VERIFIED_TAG_NAME);
         }
 
         return false;
@@ -102,9 +98,9 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
 
         NBTTagCompound cameraItemTag = craftCameraItem.getTag();
         
-        double range = cameraItemTag.getDouble(RANGE_TAG_NAME);
-        double notificationThresholdSeconds = cameraItemTag.getDouble(NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME);
-        UUID ownerId = UUID.fromString(cameraItemTag.getString(OWNER_ID_TAG_NAME));
+        double range = cameraItemTag.getDouble(CameraItemNMSTag.RANGE_TAG_NAME);
+        double notificationThresholdSeconds = cameraItemTag.getDouble(CameraItemNMSTag.NOTIFICATION_THRESHOLD_SECONDS_TAG_NAME);
+        UUID ownerId = UUID.fromString(cameraItemTag.getString(CameraItemNMSTag.OWNER_ID_TAG_NAME));
 
         return new CameraDetails(range, notificationThresholdSeconds, ownerId);
     }

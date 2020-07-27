@@ -7,6 +7,9 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.pineconelp.mc.commands.ICommandHandler;
 import com.pineconelp.mc.commands.UpdateCommandHandler;
+import com.pineconelp.mc.commands.UpdateOwnerCommandHandler;
+import com.pineconelp.mc.commands.UpdateRangeCommandHandler;
+import com.pineconelp.mc.commands.UpdateThresholdCommandHandler;
 import com.pineconelp.mc.commands.CamAlertCommand;
 import com.pineconelp.mc.commands.CreateCommandHandler;
 import com.pineconelp.mc.commands.WelcomeCommandHandler;
@@ -72,6 +75,9 @@ public class CamAlertModule extends AbstractModule {
         bind(ICommandHandler.class).annotatedWith(Names.named("NoArgsHandler")).to(WelcomeCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("CreateCommandHandler")).to(CreateCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("UpdateCommandHandler")).to(UpdateCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("UpdateRangeCommandHandler")).to(UpdateRangeCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("UpdateThresholdCommandHandler")).to(UpdateThresholdCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("UpdateOwnerCommandHandler")).to(UpdateOwnerCommandHandler.class).in(Singleton.class);
         bind(CommandExecutor.class).to(CamAlertCommand.class).in(Singleton.class);
 
         bind(CameraPlacedListener.class).in(Singleton.class);

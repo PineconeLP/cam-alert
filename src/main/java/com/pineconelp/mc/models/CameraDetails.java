@@ -13,8 +13,16 @@ public class CameraDetails {
         this.ownerPlayerId = ownerPlayerId;
     }
 
-    public CameraDetails clone(UUID newOwnerPlayerId) {
+    public CameraDetails cloneWithOwnerPlayerId(UUID newOwnerPlayerId) {
         return new CameraDetails(this.range, this.notificationThresholdSeconds, newOwnerPlayerId);
+    }
+
+    public CameraDetails cloneWithRange(double range) {
+        return new CameraDetails(range, this.notificationThresholdSeconds, this.ownerPlayerId);
+    }
+
+    public CameraDetails cloneWithThreshold(double threshold) {
+        return new CameraDetails(this.range, threshold, this.ownerPlayerId);
     }
 
     public double getRange() {

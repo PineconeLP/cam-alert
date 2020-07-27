@@ -40,6 +40,6 @@ public class CamAlertCommand implements CommandExecutor {
 
         sender.sendMessage(ChatColor.RED + "Unknown Cam Alert command.");
 
-        return false;
+        return true;
     }
 }
