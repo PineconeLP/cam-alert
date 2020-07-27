@@ -3,9 +3,9 @@ package com.pineconelp.mc.commands;
 import java.util.UUID;
 
 import com.google.inject.Inject;
-import com.pineconelp.mc.constants.Permission;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.models.CameraDetails;
+import com.pineconelp.mc.services.permissions.ICreatePermissionChecker;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
 
 import org.bukkit.command.CommandSender;
@@ -18,12 +18,14 @@ public class CreateCommandHandler implements ICommandHandler {
 
     private ICameraItemFactory cameraItemFactory;
     private CamAlertSettingsStore camAlertSettingsStore;
+    private ICreatePermissionChecker createPermissionChecker;
 
     @Inject
-    public CreateCommandHandler(ICameraItemFactory cameraItemFactory,
-            CamAlertSettingsStore camAlertSettingsStore) {
+    public CreateCommandHandler(ICameraItemFactory cameraItemFactory, CamAlertSettingsStore camAlertSettingsStore,
+            ICreatePermissionChecker createPermissionChecker) {
         this.cameraItemFactory = cameraItemFactory;
         this.camAlertSettingsStore = camAlertSettingsStore;
+        this.createPermissionChecker = createPermissionChecker;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class CreateCommandHandler implements ICommandHandler {
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if(player.hasPermission(Permission.CAM_ALERT_CREATE)) {
+            if(createPermissionChecker.canCreate(player)) {
                 double cameraRange = camAlertSettingsStore.getDefaultCameraRange();
                 double cameraNotificationThresholdSeconds = camAlertSettingsStore.getDefaultCameraNotificationThresholdSeconds();
                 UUID ownerId = player.getUniqueId();

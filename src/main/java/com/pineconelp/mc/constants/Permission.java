@@ -4,59 +4,60 @@ public class Permission {
     
     private static final String CAM_ALERT_PREFIX = "camalert";
     private static final String CAM_ALERT_CREATE_PREFIX = ".create";
+    private static final String CAM_ALERT_UPDATE_PREFIX = ".update";
 
     /**
-     * Create camera for self with default permissions.
+     * Create a camera.
      */
     public static final String CAM_ALERT_CREATE = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX;
 
     /**
-     * Create camera for other players.
+     * Update camera owner.
      */
-    public static final String CAM_ALERT_CREATE_OTHERS = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".others";
+    public static final String CAM_ALERT_UPDATE_OTHERS = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".owner";
     
     /**
-     * Create camera for any range.
+     * Update camera to any range.
      */
-    public static final String CAM_ALERT_CREATE_RANGE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".range";
+    public static final String CAM_ALERT_CREATE_RANGE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range";
     
     /**
-     * Create camera with minimum range [x].
+     * Update camera with minimum range [x].
      */
-    public static final String CAM_ALERT_CREATE_MIN_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".minrange.";
+    public static final String CAM_ALERT_CREATE_MIN_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".minrange.";
     
     /**
-     * Create camera with maximum range [x].
+     * Update camera with maximum range [x].
      */
-    public static final String CAM_ALERT_CREATE_MAX_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".maxrange.";
+    public static final String CAM_ALERT_CREATE_MAX_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".maxrange.";
     
     /**
-     * Create camera with specific range [x].
+     * Update camera with specific range [x].
      */
-    public static final String CAM_ALERT_CREATE_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".range.";
+    public static final String CAM_ALERT_CREATE_RANGE_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".range.";
     
     /**
-     * Create camera with any notification threshold seconds.
+     * Update camera with any notification threshold seconds.
      */
-    public static final String CAM_ALERT_CREATE_NOTIFY_THRESHOLD_ALL = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".notifythreshold";
+    public static final String CAM_ALERT_CREATE_NOTIFY_THRESHOLD_ALL = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".notifythreshold";
 
     /**
-     * Create camera with minimum notification threshold seconds [x].
+     * Update camera with minimum notification threshold seconds [x].
      */
-    public static final String CAM_ALERT_CREATE_MIN_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".minnotifythreshold.";
+    public static final String CAM_ALERT_CREATE_MIN_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".minnotifythreshold.";
     
     /**
-     * Create camera with maximum notification threshold seconds [x].
+     * Update camera with maximum notification threshold seconds [x].
      */
-    public static final String CAM_ALERT_CREATE_MAX_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".maxnotifythreshold.";
+    public static final String CAM_ALERT_CREATE_MAX_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".maxnotifythreshold.";
     
     /**
-     * Create camera with specific notification threshold seconds [x].
+     * Update camera with specific notification threshold seconds [x].
      */
-    public static final String CAM_ALERT_CREATE_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".notifythreshold.";
+    public static final String CAM_ALERT_CREATE_NOTIFY_THESHOLD_X_PREFIX = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".notifythreshold.";
     
     /**
-     * Create any camera.
+     * Update any camera.
      */
-    public static final String CAM_ALERT_CREATE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_CREATE_PREFIX + ".*";
+    public static final String CAM_ALERT_CREATE_ALL = CAM_ALERT_PREFIX + CAM_ALERT_UPDATE_PREFIX + ".*";
 }
