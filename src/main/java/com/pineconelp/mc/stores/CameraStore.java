@@ -51,7 +51,7 @@ public class CameraStore {
         
         try {
             camera = cameraRepository.create(camera);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new Exception("Failed to create camera.", e);
         }
     }
@@ -64,7 +64,7 @@ public class CameraStore {
 
             try {
                 cameraRepository.delete(cameraToRemove.getId());
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 throw new CameraRemoveException(cameraToRemove, e);
             }
         }
