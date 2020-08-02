@@ -27,6 +27,11 @@ public class Permission {
     public static final String SEPARATOR = ".";
 
     /**
+     * Self utility.
+     */
+    public static final String SELF = "self";
+
+    /**
      * Any value utility.
      */
     public static final String ALL = ".*";

@@ -32,6 +32,7 @@ import com.pineconelp.mc.services.camera_repositories.ICameraRepository;
 import com.pineconelp.mc.services.camera_repositories.database.DatabaseCameraRepository;
 import com.pineconelp.mc.services.permissions.ICreatePermissionChecker;
 import com.pineconelp.mc.services.permissions.IUpdateNotifyThresholdPermissionChecker;
+import com.pineconelp.mc.services.permissions.IUpdateOwnerPermissionChecker;
 import com.pineconelp.mc.services.permissions.IUpdateRangePermissionChecker;
 import com.pineconelp.mc.services.permissions.PermissionChecker;
 import com.pineconelp.mc.stores.CamAlertSettingsStore;
@@ -87,6 +88,7 @@ public class CamAlertModule extends AbstractModule {
         bind(ICreatePermissionChecker.class).to(PermissionChecker.class).in(Singleton.class);
         bind(IUpdateRangePermissionChecker.class).to(PermissionChecker.class).in(Singleton.class);
         bind(IUpdateNotifyThresholdPermissionChecker.class).to(PermissionChecker.class).in(Singleton.class);
+        bind(IUpdateOwnerPermissionChecker.class).to(PermissionChecker.class).in(Singleton.class);
 
         bind(CameraPlacedListener.class).in(Singleton.class);
         bind(CameraDestroyedListener.class).in(Singleton.class);

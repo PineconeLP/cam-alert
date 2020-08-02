@@ -7,6 +7,7 @@ import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.items.cameras.InvalidCameraItemException;
 import com.pineconelp.mc.models.CameraDetails;
+import com.pineconelp.mc.services.permissions.IUpdateOwnerPermissionChecker;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,11 +19,14 @@ public class UpdateOwnerCommandHandler implements ICommandHandler {
 
     private ICameraItemDetailer cameraItemDetailer;
     private ICameraItemFactory cameraItemFactory;
+    private IUpdateOwnerPermissionChecker permissionChecker;
 
     @Inject
-    public UpdateOwnerCommandHandler(ICameraItemDetailer cameraItemDetailer, ICameraItemFactory cameraItemFactory) {
+    public UpdateOwnerCommandHandler(ICameraItemDetailer cameraItemDetailer, ICameraItemFactory cameraItemFactory,
+            IUpdateOwnerPermissionChecker permissionChecker) {
         this.cameraItemDetailer = cameraItemDetailer;
-		this.cameraItemFactory = cameraItemFactory;
+        this.cameraItemFactory = cameraItemFactory;
+        this.permissionChecker = permissionChecker;
     }
 
     @Override
@@ -35,21 +39,26 @@ public class UpdateOwnerCommandHandler implements ICommandHandler {
                 Player ownerPlayer = Bukkit.getPlayer(playerName);
 
                 if (ownerPlayer != null) {
-                    UUID ownerId = ownerPlayer.getUniqueId();
+                    String ownerPlayerName = ownerPlayer.getName();
 
-                    ItemStack heldItem = player.getInventory().getItemInMainHand();
-                    int amount = heldItem.getAmount();
-
-                    try {
-                        CameraDetails details = cameraItemDetailer.getCameraItemDetails(heldItem);
-
-                        ItemStack updatedCameraItem = cameraItemFactory.createCameraItem(details.cloneWithOwnerPlayerId(ownerId), amount);
-                        player.getInventory().setItemInMainHand(updatedCameraItem);
-
-                        player.sendMessage(ChatColor.GREEN + String.format("Successfully updated owner to '%s'.", ownerPlayer.getDisplayName()));
-                    } catch (InvalidCameraItemException ex) {
-                        player.sendMessage(ChatColor.RED + "Please hold the camera you wish to update.");
-                    } 
+                    if(permissionChecker.canUpdateOwner(player, ownerPlayerName)) {
+                        UUID ownerId = ownerPlayer.getUniqueId();
+                        ItemStack heldItem = player.getInventory().getItemInMainHand();
+                        int amount = heldItem.getAmount();
+    
+                        try {
+                            CameraDetails details = cameraItemDetailer.getCameraItemDetails(heldItem);
+    
+                            ItemStack updatedCameraItem = cameraItemFactory.createCameraItem(details.cloneWithOwnerPlayerId(ownerId), amount);
+                            player.getInventory().setItemInMainHand(updatedCameraItem);
+    
+                            player.sendMessage(ChatColor.GREEN + String.format("Successfully updated owner to '%s'.", ownerPlayerName));
+                        } catch (InvalidCameraItemException ex) {
+                            player.sendMessage(ChatColor.RED + "Please hold the camera you wish to update.");
+                        } 
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You do not have permission to update to the owner specified.");
+                    }
                 } else {
                     player.sendMessage(String.format(ChatColor.RED + "Online player '%s' not found.", playerName));
                 }

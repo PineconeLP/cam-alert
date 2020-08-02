@@ -11,7 +11,7 @@ import com.pineconelp.mc.constants.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-public class PermissionChecker implements ICreatePermissionChecker, IUpdateRangePermissionChecker, IUpdateNotifyThresholdPermissionChecker {
+public class PermissionChecker implements ICreatePermissionChecker, IUpdateRangePermissionChecker, IUpdateNotifyThresholdPermissionChecker, IUpdateOwnerPermissionChecker {
 
     @Override
     public boolean canCreate(Player player) {
@@ -20,12 +20,17 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
 
     @Override
     public boolean canUpdateRange(Player player, double range) {
-        return hasUpdatePermission(player, () -> hasPermissionValue(player, Permission.CAM_ALERT_UPDATE_RANGE, (int)range));
+        return hasUpdatePermission(player, () -> hasNumericPermissionValue(player, Permission.CAM_ALERT_UPDATE_RANGE, (int)range));
     }
 
     @Override
     public boolean canUpdateNotifyThreshold(Player player, double threshold) {
-        return hasUpdatePermission(player, () -> hasPermissionValue(player, Permission.CAM_ALERT_UPDATE_NOTIFY_THRESHOLD, (int)threshold));
+        return hasUpdatePermission(player, () -> hasNumericPermissionValue(player, Permission.CAM_ALERT_UPDATE_NOTIFY_THRESHOLD, (int)threshold));
+    }
+
+    @Override
+    public boolean canUpdateOwner(Player player, String playerName) {
+        return hasUpdatePermission(player, () -> hasUpdateOwnerPermission(player, playerName));
     }
 
     private boolean hasUpdatePermission(Player player, BooleanSupplier hasSpecificPermission) {
@@ -44,7 +49,23 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
         return player.hasPermission(Permission.CAM_ALERT_UPDATE_ADMIN);
     }
 
-    private boolean hasPermissionValue(Player player, String prefix, int value) {
+    private boolean hasUpdateOwnerPermission(Player player, String playerName) {
+        boolean hasUpdateOwnerPermission = hasPermissionValue(player, Permission.CAM_ALERT_UPDATE_OWNER, playerName);
+
+        // Check if they have update to self permission instead.
+        if(!hasUpdateOwnerPermission) {
+            boolean isUpdatingToSelf = player.getName().equalsIgnoreCase(playerName);
+
+            if(isUpdatingToSelf) {
+                boolean hasUpdateSelfPermission = hasPermissionValue(player, Permission.CAM_ALERT_UPDATE_OWNER, Permission.SELF);
+                hasUpdateOwnerPermission = hasUpdateSelfPermission;
+            }
+        }
+
+        return hasUpdateOwnerPermission;
+    }
+
+    private boolean hasNumericPermissionValue(Player player, String prefix, int value) {
         boolean hasValue = false;
 
         if(player.hasPermission(prefix)) {
@@ -53,7 +74,7 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
             if(overrideRestrictions) {
                 hasValue = true;
             } else {
-                List<Integer> exactAllowedValues = getExactPermissionValues(player, prefix);
+                List<Integer> exactAllowedValues = getExactNumericPermissionValues(player, prefix);
                 Optional<Integer> minAllowedOptional = getMinimumPermissionValue(player, prefix);
                 Optional<Integer> maxAllowedOptional = getMaximumPermissionValue(player, prefix);
 
@@ -79,6 +100,32 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
                             hasValue = meetsMinMaxRestriction;
                         }
                     }
+                }
+            }
+        }
+
+        return hasValue;
+    }
+
+    private boolean hasPermissionValue(Player player, String prefix, String value) {
+        boolean hasValue = false;
+
+        if(player.hasPermission(prefix)) {
+            boolean overrideRestrictions = player.hasPermission(prefix + Permission.ALL);
+
+            if(overrideRestrictions) {
+                hasValue = true;
+            } else {
+                List<String> exactAllowedValues = getExactPermissionValues(player, prefix);
+                boolean hasRestriction = exactAllowedValues.size() > 0;
+
+                if(!hasRestriction) {
+                    hasValue = true;
+                } else {
+                    boolean meetsRestriction = exactAllowedValues.contains(value);
+                    if(meetsRestriction) {
+                        hasValue = true;
+                    } 
                 }
             }
         }
@@ -114,7 +161,7 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
             .min(Integer::compare);
     }
 
-    private List<Integer> getExactPermissionValues(Player player, String prefix) {
+    private List<Integer> getExactNumericPermissionValues(Player player, String prefix) {
         String exactPrefix = prefix + Permission.SEPARATOR;
 
         return getPermissionValues(player, exactPrefix)
@@ -126,6 +173,12 @@ public class PermissionChecker implements ICreatePermissionChecker, IUpdateRange
                 }
             })
             .collect(Collectors.toList());
+    }
+
+    private List<String> getExactPermissionValues(Player player, String prefix) {
+        String exactPrefix = prefix + Permission.SEPARATOR;
+        
+        return getPermissionValues(player, exactPrefix).collect(Collectors.toList());
     }
 
     /**
