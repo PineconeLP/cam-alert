@@ -12,7 +12,7 @@ import com.pineconelp.mc.commands.UpdateRangeCommandHandler;
 import com.pineconelp.mc.commands.UpdateThresholdCommandHandler;
 import com.pineconelp.mc.commands.CamAlertCommand;
 import com.pineconelp.mc.commands.CreateCommandHandler;
-import com.pineconelp.mc.commands.WelcomeCommandHandler;
+import com.pineconelp.mc.commands.HelpCommandHandler;
 import com.pineconelp.mc.items.cameras.ICameraItemDetailer;
 import com.pineconelp.mc.items.cameras.ICameraItemFactory;
 import com.pineconelp.mc.items.cameras.ICameraItemValidator;
@@ -77,7 +77,7 @@ public class CamAlertModule extends AbstractModule {
         bind(CameraStore.class).in(Singleton.class);
         bind(CamAlertSettingsStore.class).in(Singleton.class);
 
-        bind(ICommandHandler.class).annotatedWith(Names.named("NoArgsHandler")).to(WelcomeCommandHandler.class).in(Singleton.class);
+        bind(ICommandHandler.class).annotatedWith(Names.named("HelpHandler")).to(HelpCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("CreateCommandHandler")).to(CreateCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("UpdateCommandHandler")).to(UpdateCommandHandler.class).in(Singleton.class);
         bind(ICommandHandler.class).annotatedWith(Names.named("UpdateRangeCommandHandler")).to(UpdateRangeCommandHandler.class).in(Singleton.class);

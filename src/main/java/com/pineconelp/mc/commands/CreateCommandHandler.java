@@ -30,27 +30,29 @@ public class CreateCommandHandler implements ICommandHandler {
 
     @Override
     public boolean handle(CommandSender sender, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
-            if(createPermissionChecker.canCreate(player)) {
-                double cameraRange = camAlertSettingsStore.getDefaultCameraRange();
-                double cameraNotificationThresholdSeconds = camAlertSettingsStore.getDefaultCameraNotificationThresholdSeconds();
-                UUID ownerId = player.getUniqueId();
-
-                CameraDetails details = new CameraDetails(cameraRange, cameraNotificationThresholdSeconds, ownerId);
-                ItemStack cameraItem = cameraItemFactory.createCameraItem(details, 1);
-    
-                player.getInventory().addItem(cameraItem);
-                player.sendMessage(ChatColor.GREEN + "Camera created.");
-    
-                return true;
-            } else {
-                player.sendMessage(ChatColor.RED + "You do not have permission to create cameras.");
-                return true;
-            }
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "This command is limited to players.");
+            return true;
         }
 
-        return false;
+        Player player = (Player) sender;
+        boolean hasCreatePermission = createPermissionChecker.canCreate(player);
+
+        if(!hasCreatePermission) {
+            player.sendMessage(ChatColor.RED + "You do not have permission to create cameras.");
+            return true;
+        }
+        
+        double cameraRange = camAlertSettingsStore.getDefaultCameraRange();
+        double cameraNotificationThresholdSeconds = camAlertSettingsStore.getDefaultCameraNotificationThresholdSeconds();
+        UUID ownerId = player.getUniqueId();
+
+        CameraDetails details = new CameraDetails(cameraRange, cameraNotificationThresholdSeconds, ownerId);
+        ItemStack cameraItem = cameraItemFactory.createCameraItem(details, 1);
+
+        player.getInventory().addItem(cameraItem);
+        player.sendMessage(ChatColor.GREEN + "Camera created.");
+
+        return true;
     }
 }
