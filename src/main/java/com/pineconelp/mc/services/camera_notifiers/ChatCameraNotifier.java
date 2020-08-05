@@ -1,5 +1,7 @@
 package com.pineconelp.mc.services.camera_notifiers;
 
+import java.util.UUID;
+
 import com.pineconelp.mc.models.Camera;
 
 import org.bukkit.Bukkit;
@@ -11,9 +13,13 @@ public class ChatCameraNotifier implements ICameraNotifier {
 
     @Override
     public void notify(Camera camera, Entity entity) {
-        Player cameraOwner = Bukkit.getPlayer(camera.getOwnerPlayerId());
+        UUID cameraOwnerId = camera.getOwnerPlayerId();
+        Player cameraOwner = Bukkit.getPlayer(cameraOwnerId);
 
-        if(cameraOwner != null) {
+        UUID intruderId = entity.getUniqueId();
+        boolean cameraOwnerIsIntruder = cameraOwnerId.equals(intruderId);
+
+        if(cameraOwner != null && !cameraOwnerIsIntruder) {
             cameraOwner.sendMessage(ChatColor.RED + "MOVEMENT DETECTED AT CAMERA.");
         }
     }
