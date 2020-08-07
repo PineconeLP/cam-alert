@@ -7,7 +7,7 @@
             "request": "attach",
             "hostName": "localhost",
             "port": 5005,
-            "preLaunchTask": "Package"
+            "preLaunchTask": "Install"
         }
     ]
 }

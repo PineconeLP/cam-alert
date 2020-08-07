@@ -2,10 +2,10 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Package",
-            "command": "mvn package -f A:\\MinecraftProjects\\Plugins\\CamAlert\\pom.xml",
+            "label": "Install",
+            "command": "cmd",
             "type": "shell",
-            "args": [],
+            "args": ["c", "${workspaceRoot}\\scripts\\install-local.bat"],
             "presentation": {
                 "reveal": "always"
             },
