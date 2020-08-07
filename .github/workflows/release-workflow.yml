@@ -1,10 +1,9 @@
 name: Release Workflow
 
-on: [push]
-# on:
-#     push:
-#       branches:
-#         - master
+on: 
+  push:
+    tags:
+      - 'v*'
 
 jobs:
     build:
@@ -21,6 +20,10 @@ jobs:
 
             - name: Build with Maven
               run: mvn package --file pom.xml
+
+            - name: Extract Tag Name
+              uses: olegtarasov/get-tag@v2
+              id: tagName
 
             - name: Create Release
               id: create_release
@@ -40,6 +43,6 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{ steps.create_release.outputs.upload_url }}
-                asset_path: ${{ github.workspace }}/target/CamAlert-0.0.6.jar
-                asset_name: CamAlert ${{ github.ref }}
+                asset_path: ${{ github.workspace }}/target/CamAlert.jar
+                asset_name: CamAlert-${{ steps.tagName.outputs.tag }}.jar
                 asset_content_type: application/java-archive

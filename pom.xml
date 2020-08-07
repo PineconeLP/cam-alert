@@ -64,7 +64,7 @@
   </dependencies>
   <build>
     <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-    <finalName>CamAlert-${project.version}</finalName>
+    <finalName>CamAlert</finalName>
     <resources>
       <resource>
         <directory>${project.basedir}/src/main/resources</directory>
@@ -129,17 +129,6 @@
         <plugin>
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.3.2</version>
-          <configuration>
-            <packaging>jar</packaging>
-            <build>
-              <finalName>WhatEverYouLikey</finalName>
-            </build>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
