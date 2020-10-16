@@ -11,14 +11,14 @@ import com.pineconelp.mc.stores.CamAlertSettingsStore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.minecraft.server.v1_16_R1.NBTTagCompound;
-import net.minecraft.server.v1_16_R1.NBTTagDouble;
-import net.minecraft.server.v1_16_R1.NBTTagInt;
-import net.minecraft.server.v1_16_R1.NBTTagString;
+import net.minecraft.server.v1_16_R2.NBTTagCompound;
+import net.minecraft.server.v1_16_R2.NBTTagDouble;
+import net.minecraft.server.v1_16_R2.NBTTagInt;
+import net.minecraft.server.v1_16_R2.NBTTagString;
 
 public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemValidator, ICameraItemDetailer {
 
@@ -52,7 +52,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
         cameraItem.setItemMeta(itemMeta);
 
         // Add NBT tag information.
-        net.minecraft.server.v1_16_R1.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(cameraItem);
+        net.minecraft.server.v1_16_R2.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(cameraItem);
 
         NBTTagCompound cameraItemTag = craftCameraItem.hasTag() ? craftCameraItem.getTag() : new NBTTagCompound();
         cameraItemTag.set(CameraItemNMSTag.VERIFIED_TAG_NAME, NBTTagInt.a(1));
@@ -77,7 +77,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
 
     @Override
     public boolean isCameraItem(ItemStack itemStack) {
-        net.minecraft.server.v1_16_R1.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_16_R2.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(itemStack);
 
         if(craftCameraItem.hasTag()) {
             NBTTagCompound cameraItemTag = craftCameraItem.getTag();
@@ -90,7 +90,7 @@ public class NMSCameraItemFactory implements ICameraItemFactory, ICameraItemVali
 
     @Override
     public CameraDetails getCameraItemDetails(ItemStack itemStack) throws InvalidCameraItemException {
-        net.minecraft.server.v1_16_R1.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_16_R2.ItemStack craftCameraItem = CraftItemStack.asNMSCopy(itemStack);
 
         if(!craftCameraItem.hasTag()) {
             throw new InvalidCameraItemException(itemStack);
